@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 3 – Strings & Numbers</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
+  <h1 class="text-3xl font-bold mb-4">🔤 Lesson 3: Strings & Numbers</h1>
+
+  <p class="mb-4">In Python, <strong>strings</strong> are words or text, and <strong>numbers</strong> are — well — numbers! 😄</p>
+
+  <p class="mb-4">You can use them together in print statements or math operations.</p>
+
+  <pre class="bg-gray-100 p-4 rounded mb-4"><code>
+# String example
+name = "Yasar"
+print("Hello, " + name)
+
+# Number example
+x = 5
+y = 3
+print("The total is:", x + y)
+  </code></pre>
+
+  <p class="mb-6">Try editing the name or the numbers and run this in <a href="https://replit.com/" target="_blank" class="text-blue-600 underline">Replit</a> or your code editor!</p>
+
+  <button onclick="markComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-6">
+    ✅ Mark as Complete
+  </button>
+  <br />
+  <a href="../dashboard.html" class="text-blue-600 underline">← Back to Dashboard</a>
+
+  <script>
+    function markComplete() {
+      let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
+      if (!completed.includes('lesson3')) {
+        completed.push('lesson3');
+        localStorage.setItem('completedLessons', JSON.stringify(completed));
+        alert('Lesson marked as complete! ✅');
+      } else {
+        alert('You already completed this lesson!');
+      }
+    }
+  </script>
+</body>
+</html>
