@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 2 – Variables</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
+  <h1 class="text-3xl font-bold mb-4">📦 Lesson 2: Variables</h1>
+
+  <p class="mb-4">
+    Variables are like containers that hold information in your Python program.
+    You can store numbers, text, or other data — and use them later.
+  </p>
+
+  <pre class="bg-gray-100 p-4 rounded mb-4"><code>
+name = "Ali"
+age = 17
+print("My name is", name)
+print("I am", age, "years old")
+  </code></pre>
+
+  <p class="mb-4">
+    ➤ Try changing the values of <code>name</code> and <code>age</code> to your own!
+  </p>
+
+  <p class="mb-6">
+    Practice this code on <a href="https://replit.com/" target="_blank" class="text-blue-600 underline">Replit</a> or in your own Python editor.
+  </p>
+
+  <button onclick="markComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-6">
+    ✅ Mark as Complete
+  </button>
+  <br />
+  <a href="../dashboard.html" class="text-blue-600 underline">← Back to Dashboard</a>
+
+  <script>
+    function markComplete() {
+      let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
+      if (!completed.includes('lesson2')) {
+        completed.push('lesson2');
+        localStorage.setItem('completedLessons', JSON.stringify(completed));
+        alert('Lesson marked as complete! ✅');
+      } else {
+        alert('You already completed this lesson!');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -15,7 +15,21 @@
   <pre class="bg-gray-100 p-4 rounded mb-4"><code>print("Hello, world!")</code></pre>
 
   <p class="mb-6">Try writing this code in your editor or on <a href="https://replit.com/" class="text-blue-600 underline" target="_blank">Replit</a> to see it run.</p>
-
+  <button onclick="markComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-6">
+  ✅ Mark as Complete
+  </button>
   <a href="../index.html" class="text-blue-600 underline">← Back to Home</a>
+<script>
+  function markComplete() {
+    let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
+    if (!completed.includes('lesson1')) {
+      completed.push('lesson1');
+      localStorage.setItem('completedLessons', JSON.stringify(completed));
+      alert('Lesson marked as complete! ✅\nReturn to your dashboard to see your progress.');
+    } else {
+      alert('You’ve already marked this lesson as complete.');
+    }
+  }
+</script>
 </body>
 </html>
