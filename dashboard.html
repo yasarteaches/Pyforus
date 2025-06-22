@@ -33,10 +33,21 @@
           <h2 class="text-xl font-semibold">${lesson.title}</h2>
         </div>
         <div>
-          <a href="${lesson.url}" class="px-4 py-2 rounded text-white ${lesson.url === '#' ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}">
-            ${lesson.url === '#' ? 'Coming Soon' : isDone ? '✅ Completed' : 'Start'}
-          </a>
-        </div>
+          <a href="${lesson.url}" class="px-4 py-2 rounded text-white ${
+  lesson.url === '#' 
+    ? 'bg-gray-400 cursor-not-allowed' 
+    : isDone 
+      ? 'bg-green-600' 
+      : 'bg-blue-600 hover:bg-blue-700'
+}">
+  ${
+    lesson.url === '#' 
+      ? 'Coming Soon' 
+      : isDone 
+        ? '✅ Completed' 
+        : 'Start'
+  }
+</a>
       `;
 
       list.appendChild(item);
