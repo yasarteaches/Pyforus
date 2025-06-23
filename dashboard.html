@@ -34,9 +34,9 @@
   item.innerHTML = `
     <div>
       <h2 class="text-xl font-semibold">${lesson.title}</h2>
-<p class="text-sm ${assignments.includes(lesson.id) ? 'text-green-600' : 'text-red-500'}">
-  ${assignments.includes(lesson.id) ? '📝 Assignment complete' : '📝 Assignment not done yet'}
-</p>
+      <p class="text-sm ${assignments.includes(lesson.id) ? 'text-green-600' : 'text-red-500'}">
+        ${assignments.includes(lesson.id) ? '📝 Assignment complete' : '📝 Assignment not done yet'}
+      </p>
     </div>
     <div>
       <a href="${isUnlocked ? lesson.url : '#'}" class="px-4 py-2 rounded text-white ${
