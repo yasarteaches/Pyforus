@@ -23,35 +23,38 @@
 
     const list = document.getElementById('lessonList');
 
-    lessons.forEach(lesson => {
-      const isDone = completed.includes(lesson.id);
-      const item = document.createElement('div');
-      item.className = 'bg-white p-4 rounded shadow flex justify-between items-center';
+    lessons.forEach((lesson, index) => {
+  const isDone = completed.includes(lesson.id);
+  const isUnlocked = index === 0 || completed.includes(lessons[index - 1].id);
 
-      item.innerHTML = `
-        <div>
-          <h2 class="text-xl font-semibold">${lesson.title}</h2>
-        </div>
-        <div>
-          <a href="${lesson.url}" class="px-4 py-2 rounded text-white ${
-  lesson.url === '#' 
-    ? 'bg-gray-400 cursor-not-allowed' 
-    : isDone 
-      ? 'bg-green-600' 
-      : 'bg-blue-600 hover:bg-blue-700'
-}">
-  ${
-    lesson.url === '#' 
-      ? 'Coming Soon' 
-      : isDone 
-        ? '✅ Completed' 
-        : 'Start'
-  }
-</a>
-      `;
+  const item = document.createElement('div');
+  item.className = 'bg-white p-4 rounded shadow flex justify-between items-center';
 
-      list.appendChild(item);
-    });
+  item.innerHTML = `
+    <div>
+      <h2 class="text-xl font-semibold">${lesson.title}</h2>
+    </div>
+    <div>
+      <a href="${isUnlocked ? lesson.url : '#'}" class="px-4 py-2 rounded text-white ${
+        isUnlocked
+          ? isDone
+            ? 'bg-green-600'
+            : 'bg-blue-600 hover:bg-blue-700'
+          : 'bg-gray-400 cursor-not-allowed'
+      }">
+        ${
+          isUnlocked
+            ? isDone
+              ? '✅ Completed'
+              : 'Start'
+            : '🔒 Locked'
+        }
+      </a>
+    </div>
+  `;
+
+  list.appendChild(item);
+});
   </script>
 </body>
 </html>
