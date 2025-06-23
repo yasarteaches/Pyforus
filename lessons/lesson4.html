@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 4 – User Input</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
+  <h1 class="text-3xl font-bold mb-4">💬 Lesson 4: User Input</h1>
+
+  <p class="mb-4">
+    The <code>input()</code> function lets your program receive information from the user.
+  </p>
+
+  <pre class="bg-gray-100 p-4 rounded mb-4"><code>
+# Ask for a name
+name = input("What is your name? ")
+
+# Respond with a message
+print("Nice to meet you, " + name + "!")
+  </code></pre>
+
+  <p class="mb-6">Try this out on <a href="https://replit.com/" target="_blank" class="text-blue-600 underline">Replit</a> or your own editor to test it live!</p>
+
+  <button onclick="markComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-6">
+    ✅ Mark as Complete
+  </button>
+
+  <hr class="my-6" />
+
+  <h2 class="text-2xl font-semibold mb-2">📝 Assignment</h2>
+  <p class="mb-4">
+    Ask the user to enter their favorite color and favorite number. Then print a sentence using both values.
+  </p>
+
+  <pre class="bg-gray-100 p-4 rounded mb-4"><code>
+# Example:
+color = input("What's your favorite color? ")
+number = input("What's your favorite number? ")
+
+print("You like", color, "and your number is", number)
+  </code></pre>
+
+  <button onclick="markAssignment()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 mb-6">
+    ✅ Mark Assignment as Complete
+  </button>
+
+  <a href="../dashboard.html" class="text-blue-600 underline">← Back to Dashboard</a>
+
+  <script>
+    function markComplete() {
+      let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
+      if (!completed.includes('lesson4')) {
+        completed.push('lesson4');
+        localStorage.setItem('completedLessons', JSON.stringify(completed));
+        alert('Lesson marked as complete! ✅');
+      } else {
+        alert('You already completed this lesson!');
+      }
+    }
+
+    function markAssignment() {
+      let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
+      if (!assignments.includes('lesson4')) {
+        assignments.push('lesson4');
+        localStorage.setItem('completedAssignments', JSON.stringify(assignments));
+        alert('Assignment marked as complete! ✅');
+      } else {
+        alert('You already completed this assignment!');
+      }
+    }
+  </script>
+</body>
+</html>
