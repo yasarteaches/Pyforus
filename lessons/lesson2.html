@@ -69,8 +69,8 @@ print("I am", age, "years old.")
 
     function markAssignment() {
   let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
-  if (!assignments.includes('lesson3')) {
-    assignments.push('lesson3');
+  if (!assignments.includes('lesson2')) {
+    assignments.push('lesson2');
     localStorage.setItem('completedAssignments', JSON.stringify(assignments));
     alert('Assignment marked as complete! ✅');
   } else {
