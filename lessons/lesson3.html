@@ -27,22 +27,55 @@ print("The total is:", x + y)
   <p class="mb-6">Try editing the name or the numbers and run this in <a href="https://replit.com/" target="_blank" class="text-blue-600 underline">Replit</a> or your code editor!</p>
 
   <button onclick="markComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-6">
-    ✅ Mark as Complete
-  </button>
-  <br />
-  <a href="../dashboard.html" class="text-blue-600 underline">← Back to Dashboard</a>
+  ✅ Mark as Complete
+</button>
+
+<hr class="my-6" />
+
+<h2 class="text-2xl font-semibold mb-2">📝 Assignment</h2>
+<p class="mb-4">
+  Create a program that asks for a user's name and age using variables, then prints a sentence like:<br>
+  <code>Hello, my name is ____ and I am ____ years old.</code>
+</p>
+
+<pre class="bg-gray-100 p-4 rounded mb-4"><code>
+# Example:
+name = "Ali"
+age = 16
+print("Hello, my name is", name, "and I am", age, "years old.")
+</code></pre>
+
+<p class="mb-4">Try this on <a href="https://replit.com/" target="_blank" class="text-blue-600 underline">Replit</a> or your editor.</p>
+
+<button onclick="markAssignment()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 mb-6">
+  ✅ Mark Assignment as Complete
+</button>
+
+<a href="../dashboard.html" class="text-blue-600 underline">← Back to Dashboard</a>
+
 
   <script>
-    function markComplete() {
-      let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
-      if (!completed.includes('lesson3')) {
-        completed.push('lesson3');
-        localStorage.setItem('completedLessons', JSON.stringify(completed));
-        alert('Lesson marked as complete! ✅');
-      } else {
-        alert('You already completed this lesson!');
-      }
+  function markComplete() {
+    let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
+    if (!completed.includes('lesson3')) {
+      completed.push('lesson3');
+      localStorage.setItem('completedLessons', JSON.stringify(completed));
+      alert('Lesson marked as complete! ✅');
+    } else {
+      alert('You already completed this lesson!');
     }
-  </script>
+  }
+
+  function markAssignment() {
+    let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
+    if (!assignments.includes('lesson3')) {
+      assignments.push('lesson3');
+      localStorage.setItem('completedAssignments', JSON.stringify(assignments));
+      alert('Assignment marked as complete! ✅');
+    } else {
+      alert('You already completed this assignment!');
+    }
+  }
+</script>
 </body>
 </html>
