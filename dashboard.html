@@ -29,6 +29,7 @@
 
     lessons.forEach((lesson, index) => {
   const isDone = completed.includes(lesson.id);
+  const score = localStorage.getItem('quiz1to4Score');
   const isUnlocked = index === 0 || completed.includes(lessons[index - 1].id);
 
   const item = document.createElement('div');
@@ -37,6 +38,7 @@
   item.innerHTML = `
     <div>
       <h2 class="text-xl font-semibold">${lesson.title}</h2>
+      ${lesson.id === 'quiz1to4' && score ? `<p class="text-sm text-gray-600">Previous Score: ${score}%</p>` : ''}
       ${lesson.id.startsWith('lesson') ? `
         <p class="text-sm ${assignments.includes(lesson.id) ? 'text-green-600' : 'text-red-500'}">
           ${assignments.includes(lesson.id) ? '📝 Assignment complete' : '📝 Assignment not done yet'}

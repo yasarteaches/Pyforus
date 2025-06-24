@@ -98,6 +98,7 @@
         if (!quizzes.includes('lesson1to4')) {
           quizzes.push('lesson1to4');
           localStorage.setItem('completedQuizzes', JSON.stringify(quizzes));
+          localStorage.setItem('quiz1to4Score', percent);
         }
         resultDiv.innerHTML = `✅ You passed with a score of ${percent}%. You can now continue to the next lessons.`;
         resultDiv.classList.remove('text-red-600');
@@ -108,10 +109,10 @@
 
 
       } else {
-        resultDiv.innerHTML = `❌ You scored ${percent}%. Please review the lessons and try again.`;
-        resultDiv.classList.remove('text-green-600');
-        resultDiv.classList.add('text-red-600');
-      }
+          resultDiv.innerHTML = `❌ You scored ${percent}%. Please review the lessons and try again. <br><br><a href="lesson1-4-quiz.html" class="text-blue-600 underline">🔁 Try Again</a>`;
+          localStorage.setItem('quiz1to4Score', percent);
+        }
+        
     });
   </script>
   
