@@ -7,6 +7,17 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
+
+  <script>
+    const prevScore = localStorage.getItem('quiz1to4Score');
+    if (prevScore !== null) {
+      const note = document.createElement('p');
+      note.className = 'text-sm text-gray-500 mb-4';
+      note.textContent = `📊 Previous attempt: ${prevScore}%`;
+      document.body.insertBefore(note, document.querySelector('form'));
+    }
+  </script>
+
   <h1 class="text-3xl font-bold mb-6">🧠 Quiz: Review of Lessons 1–4</h1>
   <p class="mb-6">This quiz will check your understanding of the first 4 lessons. You need at least 60% to pass and unlock further content. Good luck!</p>
 
@@ -68,7 +79,7 @@
   <a href="../dashboard.html" class="text-blue-600 underline block mt-4">← Back to Dashboard</a>
 
   <script>
-    document.getElementById('quizForm').addEventListener('submit', function(e) {
+    document.getElementById('quizForm').addEventListener('submit', function (e) {
       e.preventDefault();
 
       const answers = {
@@ -93,29 +104,55 @@
       const passed = percent >= 60;
       const resultDiv = document.getElementById('result');
 
+    // Always update the latest score
+      localStorage.setItem('quiz1to4Score', percent);
+
       if (passed) {
+      // Avoid duplicate entries
         let quizzes = JSON.parse(localStorage.getItem('completedQuizzes')) || [];
         if (!quizzes.includes('lesson1to4')) {
           quizzes.push('lesson1to4');
           localStorage.setItem('completedQuizzes', JSON.stringify(quizzes));
-          localStorage.setItem('quiz1to4Score', percent);
         }
+
         resultDiv.innerHTML = `✅ You passed with a score of ${percent}%. You can now continue to the next lessons.`;
         resultDiv.classList.remove('text-red-600');
         resultDiv.classList.add('text-green-600');
 
+      // Show mark as complete button
         document.getElementById('markQuizBtn').style.display = 'inline-block';
-        document.querySelector('button[type="submit"]').disabled = true;
 
+      // Disable submit button
+        const submitBtn = document.querySelector('button[type="submit"]');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
 
       } else {
-          resultDiv.innerHTML = `❌ You scored ${percent}%. Please review the lessons and try again. <br><br><a href="lesson1-4-quiz.html" class="text-blue-600 underline">🔁 Try Again</a>`;
-          localStorage.setItem('quiz1to4Score', percent);
+        resultDiv.innerHTML = `❌ You scored ${percent}%. Please review the lessons and try again.<br><br>
+        <a href="#" id="try-again-link" class="text-blue-600 underline">🔁 Try Again</a>`;
+        resultDiv.classList.remove('text-green-600');
+        resultDiv.classList.add('text-red-600');
         }
-        
-    });
+        });
+      // Add event listener to reset form on Try Again click
+  document.addEventListener('click', function (e) {
+    if (e.target.matches('#try-again-link')) {
+      e.preventDefault();
+      document.getElementById('quizForm').reset();
+      document.getElementById('result').innerHTML = '';
+      document.getElementById('markQuizBtn').style.display = 'none';
+      const submitBtn = document.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    }
+  });
+
   </script>
-  
+
   <script>
   function markQuizComplete() {
     let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
