@@ -15,13 +15,14 @@
         const note = document.createElement('p');
         note.className = 'text-sm text-gray-500 mb-4';
         note.textContent = `📊 Previous attempt: ${prevScore}%`;
-        const form = document.querySelector('form');
-        if (form) {
-          document.body.insertBefore(note, form);
+        const quizForm = document.getElementById('quizForm');
+        if (quizForm) {
+          quizForm.parentNode.insertBefore(note, quizForm);
         }
       }
     });
   </script>
+
 
 
   <h1 class="text-3xl font-bold mb-6">🧠 Quiz: Review of Lessons 1–4</h1>
