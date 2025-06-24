@@ -60,7 +60,12 @@
   </form>
 
   <div id="result" class="mt-8 text-lg font-semibold"></div>
-  <a href="dashboard.html" class="text-blue-600 underline block mt-4">← Back to Dashboard</a>
+
+  <button id="markQuizBtn" onclick="markQuizComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mt-4" style="display: none;">
+  ✅ Mark Quiz as Complete
+  </button>
+
+  <a href="../dashboard.html" class="text-blue-600 underline block mt-4">← Back to Dashboard</a>
 
   <script>
     document.getElementById('quizForm').addEventListener('submit', function(e) {
@@ -97,6 +102,11 @@
         resultDiv.innerHTML = `✅ You passed with a score of ${percent}%. You can now continue to the next lessons.`;
         resultDiv.classList.remove('text-red-600');
         resultDiv.classList.add('text-green-600');
+
+        document.getElementById('markQuizBtn').style.display = 'inline-block';
+        document.querySelector('button[type="submit"]').disabled = true;
+
+
       } else {
         resultDiv.innerHTML = `❌ You scored ${percent}%. Please review the lessons and try again.`;
         resultDiv.classList.remove('text-green-600');
@@ -105,6 +115,19 @@
     });
   </script>
   
+  <script>
+  function markQuizComplete() {
+    let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
+    if (!completed.includes('quiz1to4')) {
+      completed.push('quiz1to4');
+      localStorage.setItem('completedLessons', JSON.stringify(completed));
+      alert('Quiz marked as complete! ✅');
+    } else {
+      alert('You already completed this quiz.');
+    }
+  }
+  </script>
+
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
     Pyforus includes embedded videos from Khan Academy for educational use. We do not own or monetize these videos. All rights to the videos belong to Khan Academy. 
     <br />
