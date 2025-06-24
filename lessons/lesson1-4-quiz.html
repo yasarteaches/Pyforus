@@ -9,14 +9,20 @@
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
 
   <script>
-    const prevScore = localStorage.getItem('quiz1to4Score');
-    if (prevScore !== null) {
-      const note = document.createElement('p');
-      note.className = 'text-sm text-gray-500 mb-4';
-      note.textContent = `📊 Previous attempt: ${prevScore}%`;
-      document.body.insertBefore(note, document.querySelector('form'));
-    }
+    document.addEventListener('DOMContentLoaded', function () {
+      const prevScore = localStorage.getItem('quiz1to4Score');
+      if (prevScore !== null) {
+        const note = document.createElement('p');
+        note.className = 'text-sm text-gray-500 mb-4';
+        note.textContent = `📊 Previous attempt: ${prevScore}%`;
+        const form = document.querySelector('form');
+        if (form) {
+          document.body.insertBefore(note, form);
+        }
+      }
+    });
   </script>
+
 
   <h1 class="text-3xl font-bold mb-6">🧠 Quiz: Review of Lessons 1–4</h1>
   <p class="mb-6">This quiz will check your understanding of the first 4 lessons. You need at least 60% to pass and unlock further content. Good luck!</p>
