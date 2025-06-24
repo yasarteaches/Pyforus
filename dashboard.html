@@ -13,13 +13,14 @@
   </div>
 
   <script>
-    const lessons = [
-      { id: 'lesson1', title: 'Lesson 1: What is Python?', url: 'lessons/lesson1.html' },
-      { id: 'lesson2', title: 'Lesson 2: Variables', url: 'lessons/lesson2.html' },
-      { id: 'lesson3', title: 'Lesson 3: Strings & Numbers', url: 'lessons/lesson3.html' },
-      { id: 'lesson4', title: 'Lesson 4: User Input', url: 'lessons/lesson4.html' },
-      { id: 'quiz1to4', title: '🧠 Quiz: Lessons 1–4', url: 'lessons/lesson1-4-quiz.html' }
-    ];
+      const lessons = [
+    { id: 'lesson1', title: 'Lesson 1: What is Python?', url: 'lessons/lesson1.html' },
+    { id: 'lesson2', title: 'Lesson 2: Variables', url: 'lessons/lesson2.html' },
+    { id: 'lesson3', title: 'Lesson 3: Strings & Numbers', url: 'lessons/lesson3.html' },
+    { id: 'lesson4', title: 'Lesson 4: User Input', url: 'lessons/lesson4.html' },
+    { id: 'quiz1to4', title: 'Quiz: Lessons 1–4', url: 'lessons/lesson1-4-quiz.html' },
+  ];
+
 
     const completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
     const assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
@@ -36,9 +37,11 @@
   item.innerHTML = `
     <div>
       <h2 class="text-xl font-semibold">${lesson.title}</h2>
-      <p class="text-sm ${assignments.includes(lesson.id) ? 'text-green-600' : 'text-red-500'}">
-        ${assignments.includes(lesson.id) ? '📝 Assignment complete' : '📝 Assignment not done yet'}
-      </p>
+      ${lesson.id.startsWith('lesson') ? `
+        <p class="text-sm ${assignments.includes(lesson.id) ? 'text-green-600' : 'text-red-500'}">
+          ${assignments.includes(lesson.id) ? '📝 Assignment complete' : '📝 Assignment not done yet'}
+        </p>` : ''}
+
     </div>
     <div>
       <a href="${isUnlocked ? lesson.url : '#'}" class="px-4 py-2 rounded text-white ${
@@ -62,9 +65,6 @@
   list.appendChild(item);
 });
   </script>
-<a href="lessons/lesson1-4-quiz.html" class="text-blue-600 underline block mt-4">
-  🧠 Take Quiz: Lessons 1–4
-</a>
 
 <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
   Pyforus includes embedded videos from Khan Academy for educational use. We do not own or monetize these videos. All rights to the videos belong to Khan Academy. 
