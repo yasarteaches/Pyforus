@@ -13,61 +13,71 @@
   </div>
 
   <script>
-      const lessons = [
+  const lessons = [
     { id: 'lesson1', title: 'Lesson 1: What is Python?', url: 'lessons/lesson1.html' },
     { id: 'lesson2', title: 'Lesson 2: Variables', url: 'lessons/lesson2.html' },
     { id: 'lesson3', title: 'Lesson 3: Strings & Numbers', url: 'lessons/lesson3.html' },
     { id: 'lesson4', title: 'Lesson 4: User Input', url: 'lessons/lesson4.html' },
     { id: 'quiz1to4', title: 'Quiz: Lessons 1–4', url: 'lessons/lesson1-4-quiz.html' },
+    { id: 'lesson5', title: 'Lesson 5: Graphics', url: 'lessons/lesson5.html' },
+    { id: 'lesson6', title: 'Lesson 6: Data & Lists', url: 'lessons/lesson6.html' },
+    { id: 'lesson7', title: 'Lesson 7: Dictionaries & Advanced Structures', url: 'lessons/lesson7.html' }
   ];
 
+  const completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
+  const assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
+  const score = parseInt(localStorage.getItem('quiz1to4Score')) || null;
 
-    const completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
-    const assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
+  const list = document.getElementById('lessonList');
 
-    const list = document.getElementById('lessonList');
+  lessons.forEach((lesson, index) => {
+    let isUnlocked = false;
 
-    lessons.forEach((lesson, index) => {
-  const isDone = completed.includes(lesson.id);
-  const score = localStorage.getItem('quiz1to4Score');
-  const isUnlocked = index === 0 || completed.includes(lessons[index - 1].id);
+    if (index === 0) {
+      isUnlocked = true;
+    } else if (lesson.id === 'lesson5') {
+      // Lesson 5 unlock logic: quiz must be completed and score >= 60
+      isUnlocked = completed.includes('quiz1to4') && score >= 60;
+    } else {
+      isUnlocked = completed.includes(lessons[index - 1].id);
+    }
 
-  const item = document.createElement('div');
-  item.className = 'bg-white p-4 rounded shadow flex justify-between items-center';
+    const isDone = completed.includes(lesson.id);
 
-  item.innerHTML = `
-    <div>
-      <h2 class="text-xl font-semibold">${lesson.title}</h2>
-      ${lesson.id === 'quiz1to4' && score ? `<p class="text-sm text-gray-600">Previous Score: ${score}%</p>` : ''}
-      ${lesson.id.startsWith('lesson') ? `
-        <p class="text-sm ${assignments.includes(lesson.id) ? 'text-green-600' : 'text-red-500'}">
-          ${assignments.includes(lesson.id) ? '📝 Assignment complete' : '📝 Assignment not done yet'}
-        </p>` : ''}
+    const item = document.createElement('div');
+    item.className = 'bg-white p-4 rounded shadow flex justify-between items-center';
 
-    </div>
-    <div>
-      <a href="${isUnlocked ? lesson.url : '#'}" class="px-4 py-2 rounded text-white ${
-        isUnlocked
-          ? isDone
-            ? 'bg-green-600'
-            : 'bg-blue-600 hover:bg-blue-700'
-          : 'bg-gray-400 cursor-not-allowed'
-      }">
-        ${
+    item.innerHTML = `
+      <div>
+        <h2 class="text-xl font-semibold">${lesson.title}</h2>
+        ${lesson.id === 'quiz1to4' && score !== null ? `<p class="text-sm text-gray-600">📊 Previous Score: ${score}%</p>` : ''}
+        ${lesson.id.startsWith('lesson') ? `
+          <p class="text-sm ${assignments.includes(lesson.id) ? 'text-green-600' : 'text-red-500'}">
+            ${assignments.includes(lesson.id) ? '📝 Assignment complete' : '📝 Assignment not done yet'}
+          </p>` : ''}
+      </div>
+      <div>
+        <a href="${isUnlocked ? lesson.url : '#'}" class="px-4 py-2 rounded text-white ${
           isUnlocked
             ? isDone
-              ? '✅ Completed'
-              : 'Start'
-            : '🔒 Locked'
-        }
-      </a>
-    </div>
-  `;
+              ? 'bg-green-600'
+              : 'bg-blue-600 hover:bg-blue-700'
+            : 'bg-gray-400 cursor-not-allowed'
+        }">
+          ${
+            isUnlocked
+              ? isDone
+                ? '✅ Completed'
+                : 'Start'
+              : '🔒 Locked'
+          }
+        </a>
+      </div>
+    `;
 
-  list.appendChild(item);
-});
-  </script>
-
+    list.appendChild(item);
+  });
+</script>
 <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
   Pyforus includes embedded videos from Khan Academy for educational use. We do not own or monetize these videos. All rights to the videos belong to Khan Academy. 
   <br />

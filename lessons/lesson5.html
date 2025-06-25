@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 5: Drawing with Turtle</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
+
+  <h1 class="text-3xl font-bold mb-4">🎨 Lesson 5: Drawing with Turtle</h1>
+  <p class="mb-6 text-gray-700">Welcome to your first graphics lesson! Today, we will explore Python's <code>turtle</code> module, which lets you draw on the screen using code.</p>
+
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">📺 Watch: Introduction to Turtle Graphics</h2>
+    <iframe class="w-full aspect-video" src="https://www.youtube.com/embed/p7VAq3I5kXs" title="Khan Academy Turtle Graphics" frameborder="0" allowfullscreen></iframe>
+  </div>
+
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">📘 What is Turtle?</h2>
+    <p>The <code>turtle</code> module lets you control a turtle that draws on the screen. You can move it forward, turn it, change colors, and much more!</p>
+  </div>
+
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">💻 Example Code</h2>
+    <pre class="bg-gray-100 p-4 rounded"><code>import turtle
+
+window = turtle.Screen()
+my_turtle = turtle.Turtle()
+
+my_turtle.forward(100)
+my_turtle.left(90)
+my_turtle.forward(100)
+
+window.mainloop()</code></pre>
+    <p class="mt-2 text-sm text-gray-600">This code creates a window and makes the turtle draw a simple L-shape.</p>
+  </div>
+
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">🧠 Try This</h2>
+    <ul class="list-disc list-inside">
+      <li>Make the turtle draw a square.</li>
+      <li>Change the color of the turtle's pen.</li>
+      <li>Make the turtle draw a triangle.</li>
+    </ul>
+  </div>
+
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">📌 Assignment</h2>
+    <p>Write a Python program that uses the turtle to draw a house-shaped figure (square + triangle roof). Mark the lesson complete when done.</p>
+  </div>
+
+  <button onclick="markLessonComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+    ✅ Mark Lesson as Complete
+  </button>
+
+  <script>
+    function markLessonComplete() {
+      let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
+      if (!completed.includes('lesson5')) {
+        completed.push('lesson5');
+        localStorage.setItem('completedLessons', JSON.stringify(completed));
+        alert('Lesson marked as complete! ✅');
+      } else {
+        alert('You already completed this lesson.');
+      }
+    }
+  </script>
+
+  <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
+    Pyforus includes embedded videos from Khan Academy for educational use. We do not own or monetize these videos. All rights to the videos belong to Khan Academy.
+  </footer>
+
+</body>
+</html>

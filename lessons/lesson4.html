@@ -1,97 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lesson 4 – User Input</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 4: Functions</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
-  <h1 class="text-3xl font-bold mb-4">💬 Lesson 4: User Input</h1>
+  <h1 class="text-3xl font-bold mb-4">Lesson 4: Functions</h1>
 
-  <p class="mb-4">
-    The <code>input()</code> function lets your program receive information from the user.
-  </p>
-
-  <pre class="bg-gray-100 p-4 rounded mb-4"><code>
-# Ask for a name
-name = input("What is your name? ")
-
-# Respond with a message
-print("Nice to meet you, " + name + "!")
-  </code></pre>
-
-  <p class="mb-6">Try this out on <a href="https://replit.com/" target="_blank" class="text-blue-600 underline">Replit</a> or your own editor to test it live!</p>
+  <!-- Khan Academy Video Placeholder -->
   <div class="mb-6">
-  <h2 class="text-2xl font-semibold mb-2">🎥 Khan Academy Video</h2>
-  <div class="relative pt-[56.25%]">
-    <iframe
-      class="absolute top-0 left-0 w-full h-full"
-      src="https://www.youtube.com/embed/SOLnbKI73Wo"
-      title="User input | Intro to CS - Python | Khan Academy"
-      frameborder="0"
-      allowfullscreen>
-    </iframe>
+    <iframe class="w-full aspect-video" src="https://www.youtube.com/embed/H1elmMBnykA" title="Khan Academy Python Functions" allowfullscreen></iframe>
   </div>
-  <p class="text-sm text-gray-500 mt-2">
-    Video credit: Khan Academy (
-    <a href="https://www.khanacademy.org/computing/computer‐programming" target="_blank" class="underline">
-      Visit site
-    </a>)
-  </p>
-</div>
-  <button onclick="markComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-6">
+
+  <!-- Objectives -->
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">📌 Objectives</h2>
+    <ul class="list-disc list-inside space-y-1">
+      <li>Understand what functions are and why we use them.</li>
+      <li>Learn how to define and call a function in Python.</li>
+      <li>Explore parameters and return values.</li>
+    </ul>
+  </div>
+
+  <!-- Code Examples -->
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">💻 Code Examples</h2>
+    <pre class="bg-gray-100 p-4 rounded"><code># Defining a function
+
+def greet():
+    print("Hello, welcome!")
+
+# Calling the function
+greet()
+
+# Function with parameter
+def greet_user(name):
+    print("Hello, " + name + "!")
+
+greet_user("Mira")
+
+# Function with return value
+def add(a, b):
+    return a + b
+
+result = add(3, 4)
+print(result)</code></pre>
+  </div>
+
+  <!-- Assignment -->
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">📝 Assignment</h2>
+    <p class="mb-2">Create a function named <code>square</code> that takes a number and returns its square. Then use it to print the square of 7.</p>
+    <pre class="bg-gray-100 p-4 rounded"><code># Your turn!
+# Write the function and print the result of square(7)</code></pre>
+  </div>
+
+  <!-- Mark Complete Button -->
+  <button onclick="markComplete('lesson4')" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
     ✅ Mark as Complete
   </button>
 
-  <hr class="my-6" />
-
-  <h2 class="text-2xl font-semibold mb-2">📝 Assignment</h2>
-  <p class="mb-4">
-    Ask the user to enter their favorite color and favorite number. Then print a sentence using both values.
-  </p>
-
-  <pre class="bg-gray-100 p-4 rounded mb-4"><code>
-# Example:
-color = input("What's your favorite color? ")
-number = input("What's your favorite number? ")
-
-print("You like", color, "and your number is", number)
-  </code></pre>
-
-  <button onclick="markAssignment()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 mb-6">
-    ✅ Mark Assignment as Complete
-  </button>
-
-  <a href="../dashboard.html" class="text-blue-600 underline">← Back to Dashboard</a>
+  <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
 
   <script>
-    function markComplete() {
+    function markComplete(lessonId) {
       let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
-      if (!completed.includes('lesson4')) {
-        completed.push('lesson4');
+      if (!completed.includes(lessonId)) {
+        completed.push(lessonId);
         localStorage.setItem('completedLessons', JSON.stringify(completed));
-        alert('Lesson marked as complete! ✅');
+        alert("Lesson marked as complete!");
       } else {
-        alert('You already completed this lesson!');
-      }
-    }
-
-    function markAssignment() {
-      let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
-      if (!assignments.includes('lesson4')) {
-        assignments.push('lesson4');
-        localStorage.setItem('completedAssignments', JSON.stringify(assignments));
-        alert('Assignment marked as complete! ✅');
-      } else {
-        alert('You already completed this assignment!');
+        alert("You've already completed this lesson.");
       }
     }
   </script>
-<footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
-  Pyforus includes embedded videos from Khan Academy for educational use. We do not own or monetize these videos. All rights to the videos belong to Khan Academy. 
-  <br />
-  Our platform offers custom lessons, assignments, and optional certification.
-</footer>
 </body>
 </html>

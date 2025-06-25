@@ -2,82 +2,70 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lesson 1 – What is Python?</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lesson 1 – Introduction to Python</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
-  <h1 class="text-3xl font-bold mb-4">🎓 Lesson 1: What is Python?</h1>
-  <p class="mb-4">Python is a beginner-friendly programming language used in web development, automation, AI, and more.</p>
 
-  <p class="mb-4">It’s known for being easy to read and write — perfect for people learning to code.</p>
+  <h1 class="text-3xl font-bold mb-4">🐍 Lesson 1: Introduction to Python</h1>
 
-  <pre class="bg-gray-100 p-4 rounded mb-4"><code>print("Hello, world!")</code></pre>
-
-  <p class="mb-6">Try writing this code in your editor or on <a href="https://replit.com/" class="text-blue-600 underline" target="_blank">Replit</a> to see it run.</p>
+  <!-- Video -->
   <div class="mb-6">
-  <h2 class="text-2xl font-semibold mb-2">🎥 Khan Academy Video</h2>
-  <div class="relative" style="padding-top: 56.25%;">
-    <iframe 
-      class="absolute top-0 left-0 w-full h-full"
-      src="https://www.youtube.com/embed/zzjNg-jNflY"
-      title="Introduction to Programming by Khan Academy"
-      frameborder="0"
-      allowfullscreen>
-    </iframe>
+    <iframe class="w-full aspect-video rounded-xl" src="https://www.youtube.com/embed/4Mf0h3HphEA" title="Khan Academy Python Intro" allowfullscreen></iframe>
   </div>
-  <p class="text-sm text-gray-500 mt-2">
-    Video credit: Khan Academy (<a href="https://www.khanacademy.org/" target="_blank" class="underline">Visit site</a>)
-  </p>
-</div>
-  <button onclick="markComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-6">
-  ✅ Mark as Complete
+
+  <!-- Objectives -->
+  <h2 class="text-xl font-semibold mb-2">🎯 Learning Objectives</h2>
+  <ul class="list-disc list-inside mb-6 text-gray-800">
+    <li>Understand what Python is and where it’s used.</li>
+    <li>Write and run your first Python program.</li>
+    <li>Use the <code>print()</code> function to display output.</li>
+    <li>Understand strings, numbers, and basic variables.</li>
+  </ul>
+
+  <!-- Code Examples -->
+  <h2 class="text-xl font-semibold mb-2">💻 Code Examples</h2>
+  <pre class="bg-gray-100 p-4 rounded mb-6 text-sm overflow-x-auto"><code># This is a comment
+print("Hello, world!")
+
+# Variables
+name = "Ali"
+age = 16
+print(name)
+print(age)</code></pre>
+
+  <!-- Assignment -->
+  <h2 class="text-xl font-semibold mb-2">📝 Your Assignment</h2>
+  <p class="mb-4">Write a Python program that prints your name and your favorite number. Here's a starter:</p>
+  <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code># Your code here:
+print("My name is ___")
+print("My favorite number is ___")</code></pre>
+
+  <!-- Mark Complete -->
+  <button id="completeBtn" class="bg-green-600 text-white px-4 py-2 mt-6 rounded hover:bg-green-700">
+    ✅ Mark Lesson as Complete
   </button>
-  <hr class="my-6" />
 
-<h2 class="text-2xl font-semibold mb-2">📝 Assignment</h2>
-<p class="mb-4">Create a simple Python script that prints your name and your favorite hobby.</p>
+  <a href="dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
 
-<pre class="bg-gray-100 p-4 rounded mb-4"><code>
-# Example output:
-print("My name is Mark.")
-print("I love building websites!")
-</code></pre>
+  <script>
+    const completeBtn = document.getElementById('completeBtn');
+    completeBtn.addEventListener('click', () => {
+      let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
+      if (!completed.includes('lesson1')) {
+        completed.push('lesson1');
+        localStorage.setItem('completedLessons', JSON.stringify(completed));
+        alert('Lesson marked as complete! ✅');
+      } else {
+        alert('You already completed this lesson.');
+      }
+    });
+  </script>
 
-<p class="mb-4">Try this on <a href="https://replit.com/" target="_blank" class="text-blue-600 underline">Replit</a> or your Python editor.</p>
+  <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
+    Pyforus includes embedded videos from Khan Academy for educational use. We do not own or monetize these videos. All rights to the videos belong to Khan Academy.
+  </footer>
 
-<button onclick="markAssignment()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 mb-6">
-  ✅ Mark Assignment as Complete
-</button>
-
-  <a href="../dashboard.html" class="text-blue-600 underline">← Back to Dashboard</a>
-<script>
-  function markComplete() {
-    let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
-    if (!completed.includes('lesson1')) {
-      completed.push('lesson1');
-      localStorage.setItem('completedLessons', JSON.stringify(completed));
-      alert('Lesson marked as complete! ✅\nReturn to your dashboard to see your progress.');
-    } else {
-      alert('You’ve already marked this lesson as complete.');
-    }
-  }
-
-    function markAssignment() {
-    let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
-    if (!assignments.includes('lesson1')) {
-      assignments.push('lesson1');
-      localStorage.setItem('completedAssignments', JSON.stringify(assignments));
-      alert('Assignment marked as complete! ✅');
-    } else {
-      alert('You’ve already completed this assignment.');
-    }
-  }
-</script>
-<footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
-  Pyforus includes embedded videos from Khan Academy for educational use. We do not own or monetize these videos. All rights to the videos belong to Khan Academy. 
-  <br />
-  Our platform offers custom lessons, assignments, and optional certification.
-</footer>
 </body>
 </html>

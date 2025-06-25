@@ -3,98 +3,63 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lesson 3 – Strings & Numbers</title>
+  <title>Lesson 3: Loops (for & while)</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
-  <h1 class="text-3xl font-bold mb-4">🔤 Lesson 3: Strings & Numbers</h1>
+  <h1 class="text-3xl font-bold mb-4">🔁 Lesson 3: Loops (for & while)</h1>
 
-  <p class="mb-4">In Python, <strong>strings</strong> are words or text, and <strong>numbers</strong> are — well — numbers! 😄</p>
+  <p class="mb-6">Loops let us repeat actions in Python. We'll cover both <code>for</code> and <code>while</code> loops and learn when to use each one.</p>
 
-  <p class="mb-4">You can use them together in print statements or math operations.</p>
-
-  <pre class="bg-gray-100 p-4 rounded mb-4"><code>
-# String example
-name = "Yasar"
-print("Hello, " + name)
-
-# Number example
-x = 5
-y = 3
-print("The total is:", x + y)
-  </code></pre>
-
-  <p class="mb-6">Try editing the name or the numbers and run this in <a href="https://replit.com/" target="_blank" class="text-blue-600 underline">Replit</a> or your code editor!</p>
   <div class="mb-6">
-  <h2 class="text-2xl font-semibold mb-2">🎥 Khan Academy Video</h2>
-  <div class="relative pt-[56.25%]">
-    <iframe 
-      class="absolute top-0 left-0 w-full h-full"
-      src="https://www.youtube.com/embed/y-FlANhhNiA"
-      title="Type Casting & Strings - Khan Academy"
-      frameborder="0"
-      allowfullscreen>
-    </iframe>
+    <h2 class="text-2xl font-semibold mb-2">🎥 Watch: Intro to Loops</h2>
+    <iframe width="100%" height="315" src="https://www.youtube.com/embed/QVKj3LADCnA" title="Khan Academy - Loops" frameborder="0" allowfullscreen></iframe>
   </div>
-  <p class="text-sm text-gray-500 mt-2">
-    Video credit: Khan Academy (<a href="https://www.khanacademy.org/" target="_blank" class="underline">Visit site</a>)
-  </p>
-</div>
-  <button onclick="markComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-6">
-  ✅ Mark as Complete
-</button>
 
-<hr class="my-6" />
+  <div class="mb-6">
+    <h2 class="text-2xl font-semibold mb-2">📌 Objectives</h2>
+    <ul class="list-disc list-inside">
+      <li>Understand what loops are and why we use them</li>
+      <li>Write <code>for</code> loops to iterate over ranges or lists</li>
+      <li>Use <code>while</code> loops to repeat based on a condition</li>
+    </ul>
+  </div>
 
-<h2 class="text-2xl font-semibold mb-2">📝 Assignment</h2>
-<p class="mb-4">
-  Create a program that asks for a user's name and age using variables, then prints a sentence like:<br>
-  <code>Hello, my name is ____ and I am ____ years old.</code>
-</p>
+  <div class="mb-6">
+    <h2 class="text-2xl font-semibold mb-2">💡 Examples</h2>
+    <p class="mb-2">Here is a simple <code>for</code> loop:</p>
+    <pre class="bg-gray-100 p-4 rounded"><code>for i in range(5):
+  print(i)</code></pre>
 
-<pre class="bg-gray-100 p-4 rounded mb-4"><code>
-# Example:
-name = "Ali"
-age = 16
-print("Hello, my name is", name, "and I am", age, "years old.")
-</code></pre>
+    <p class="mt-4 mb-2">And a basic <code>while</code> loop:</p>
+    <pre class="bg-gray-100 p-4 rounded"><code>count = 0
+while count < 5:
+  print(count)
+  count += 1</code></pre>
+  </div>
 
-<p class="mb-4">Try this on <a href="https://replit.com/" target="_blank" class="text-blue-600 underline">Replit</a> or your editor.</p>
+  <div class="mb-6">
+    <h2 class="text-2xl font-semibold mb-2">🧪 Assignment</h2>
+    <p class="mb-2">Create a program that asks the user to enter a number and then prints all numbers from 1 to that number using a <code>for</code> loop.</p>
+    <p>Then add another part that uses a <code>while</code> loop to count down from that number to 1.</p>
+  </div>
 
-<button onclick="markAssignment()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 mb-6">
-  ✅ Mark Assignment as Complete
-</button>
-
-<a href="../dashboard.html" class="text-blue-600 underline">← Back to Dashboard</a>
-
+  <button id="markCompleteBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+    ✅ Mark as Complete
+  </button>
 
   <script>
-  function markComplete() {
-    let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
-    if (!completed.includes('lesson3')) {
-      completed.push('lesson3');
-      localStorage.setItem('completedLessons', JSON.stringify(completed));
-      alert('Lesson marked as complete! ✅');
-    } else {
-      alert('You already completed this lesson!');
-    }
-  }
-
-  function markAssignment() {
-    let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
-    if (!assignments.includes('lesson3')) {
-      assignments.push('lesson3');
-      localStorage.setItem('completedAssignments', JSON.stringify(assignments));
-      alert('Assignment marked as complete! ✅');
-    } else {
-      alert('You already completed this assignment!');
-    }
-  }
-</script>
-<footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
-  Pyforus includes embedded videos from Khan Academy for educational use. We do not own or monetize these videos. All rights to the videos belong to Khan Academy. 
-  <br />
-  Our platform offers custom lessons, assignments, and optional certification.
-</footer>
+    const btn = document.getElementById('markCompleteBtn');
+    btn.addEventListener('click', () => {
+      let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
+      if (!completed.includes('lesson3')) {
+        completed.push('lesson3');
+        localStorage.setItem('completedLessons', JSON.stringify(completed));
+        alert('Lesson 3 marked as complete! ✅');
+      } else {
+        alert('You already completed this lesson.');
+      }
+    });
+  </script>
 </body>
 </html>

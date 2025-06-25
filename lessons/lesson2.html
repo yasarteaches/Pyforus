@@ -2,100 +2,85 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lesson 2 – Variables</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lesson 2 – Control Flow (if/else)</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
-  <h1 class="text-3xl font-bold mb-4">📦 Lesson 2: Variables</h1>
 
-  <p class="mb-4">
-    Variables are like containers that hold information in your Python program.
-    You can store numbers, text, or other data — and use them later.
-  </p>
+  <h1 class="text-3xl font-bold mb-4">🔀 Lesson 2: Control Flow (if/else)</h1>
 
-  <pre class="bg-gray-100 p-4 rounded mb-4"><code>
-name = "Ali"
-age = 17
-print("My name is", name)
-print("I am", age, "years old")
-  </code></pre>
-
-  <p class="mb-4">
-    ➤ Try changing the values of <code>name</code> and <code>age</code> to your own!
-  </p>
-
-  <p class="mb-6">
-    Practice this code on <a href="https://replit.com/" target="_blank" class="text-blue-600 underline">Replit</a> or in your own Python editor.
-  </p>
+  <!-- Video -->
   <div class="mb-6">
-  <h2 class="text-2xl font-semibold mb-2">🎥 Khan Academy Video</h2>
-  <div class="relative pt-[56.25%]">
-    <iframe 
-      class="absolute top-0 left-0 w-full h-full"
-      src="https://www.youtube.com/embed/52RHZdBSjTw"
-      title="Variables & Assignment - Khan Academy"
-      frameborder="0"
-      allowfullscreen>
-    </iframe>
+    <iframe class="w-full aspect-video rounded-xl" src="https://www.youtube.com/embed/f4KOjWS_KZs" title="Khan Academy Python if statements" allowfullscreen></iframe>
   </div>
-  <p class="text-sm text-gray-500 mt-2">
-    Video credit: Khan Academy (<a href="https://www.khanacademy.org/" target="_blank" class="underline">Visit site</a>)
-  </p>
-</div>
-  <button onclick="markComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-6">
-    ✅ Mark as Complete
-  </button>
-  <br />
-  <hr class="my-6" />
 
-<h2 class="text-2xl font-semibold mb-2">📝 Assignment</h2>
-<p class="mb-4">Create a Python program that defines two variables: your favorite food and your age. Then print both using descriptive sentences.</p>
+  <!-- Objectives -->
+  <h2 class="text-xl font-semibold mb-2">🎯 Learning Objectives</h2>
+  <ul class="list-disc list-inside mb-6 text-gray-800">
+    <li>Understand how Python makes decisions using <code>if</code> statements.</li>
+    <li>Use <code>else</code> and <code>elif</code> for multiple outcomes.</li>
+    <li>Combine conditions with comparison operators.</li>
+  </ul>
 
-<pre class="bg-gray-100 p-4 rounded mb-4"><code>
-# Example:
-favorite_food = "pizza"
-age = 17
+  <!-- Code Examples -->
+  <h2 class="text-xl font-semibold mb-2">💻 Code Examples</h2>
+  <pre class="bg-gray-100 p-4 rounded mb-6 text-sm overflow-x-auto"><code>age = 18
 
-print("My favorite food is", favorite_food)
-print("I am", age, "years old.")
+if age >= 18:
+    print("You are an adult.")
+else:
+    print("You are a minor.")
+
+# Using elif
+score = 85
+
+if score >= 90:
+    print("A grade")
+elif score >= 80:
+    print("B grade")
+else:
+    print("Needs improvement")</code></pre>
+
+  <!-- Assignment -->
+  <h2 class="text-xl font-semibold mb-2">📝 Your Assignment</h2>
+  <p class="mb-4">Write a program that asks for a user's age and prints one of the following:</p>
+  <ul class="list-disc list-inside mb-4 text-gray-800">
+    <li>“You are a child.” (if under 13)</li>
+    <li>“You are a teenager.” (13 to 19)</li>
+    <li>“You are an adult.” (20 and older)</li>
+  </ul>
+
+  <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code># Your code here:
+age = int(input("Enter your age: "))
+
+# Write your if/elif/else here
 </code></pre>
 
-<p class="mb-4">Try this on <a href="https://replit.com/" target="_blank" class="text-blue-600 underline">Replit</a> or your Python editor.</p>
+  <!-- Mark Complete -->
+  <button id="completeBtn" class="bg-green-600 text-white px-4 py-2 mt-6 rounded hover:bg-green-700">
+    ✅ Mark Lesson as Complete
+  </button>
 
-<button onclick="markAssignment()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 mb-6">
-  ✅ Mark Assignment as Complete
-</button>
-
-  <a href="../dashboard.html" class="text-blue-600 underline">← Back to Dashboard</a>
+  <a href="dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
 
   <script>
-    function markComplete() {
+    const completeBtn = document.getElementById('completeBtn');
+    completeBtn.addEventListener('click', () => {
       let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
       if (!completed.includes('lesson2')) {
         completed.push('lesson2');
         localStorage.setItem('completedLessons', JSON.stringify(completed));
         alert('Lesson marked as complete! ✅');
       } else {
-        alert('You already completed this lesson!');
+        alert('You already completed this lesson.');
       }
-    }
-
-    function markAssignment() {
-  let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
-  if (!assignments.includes('lesson2')) {
-    assignments.push('lesson2');
-    localStorage.setItem('completedAssignments', JSON.stringify(assignments));
-    alert('Assignment marked as complete! ✅');
-  } else {
-    alert('You’ve already completed this assignment.');
-  }
-}
+    });
   </script>
-<footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
-  Pyforus includes embedded videos from Khan Academy for educational use. We do not own or monetize these videos. All rights to the videos belong to Khan Academy. 
-  <br />
-  Our platform offers custom lessons, assignments, and optional certification.
-</footer>
+
+  <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
+    Pyforus includes embedded videos from Khan Academy for educational use. We do not own or monetize these videos. All rights to the videos belong to Khan Academy.
+  </footer>
+
 </body>
 </html>

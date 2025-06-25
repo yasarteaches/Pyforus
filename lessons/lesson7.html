@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 7 – Dictionaries & Advanced Structures</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
+  <h1 class="text-3xl font-bold mb-4">📘 Lesson 7: Dictionaries & Advanced Structures</h1>
+
+  <p class="mb-6 text-gray-700">Dictionaries in Python allow you to store data using key-value pairs. They're very useful for organizing data that has labels.</p>
+
+  <div class="mb-8">
+    <h2 class="text-xl font-semibold mb-2">🎥 Khan Academy Video</h2>
+    <iframe class="w-full aspect-video" src="https://www.youtube.com/embed/4JxSx3zZ3ro" title="Khan Academy Python Dictionaries" allowfullscreen></iframe>
+  </div>
+
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">📌 What You'll Learn</h2>
+    <ul class="list-disc pl-6 text-gray-800">
+      <li>How to define and use dictionaries</li>
+      <li>Accessing, updating, and deleting values</li>
+      <li>Looping through dictionaries</li>
+      <li>Working with nested dictionaries/lists</li>
+    </ul>
+  </div>
+
+  <div class="mb-8">
+    <h2 class="text-xl font-semibold mb-2">🔤 Example</h2>
+    <pre class="bg-gray-100 p-4 rounded"><code>student = {
+  "name": "Ali",
+  "age": 16,
+  "grades": [85, 90, 92]
+}
+
+print(student["name"])        # Ali
+student["age"] = 17            # Update value
+student["city"] = "Istanbul"   # Add new key-value pair
+
+for key in student:
+    print(key, ":", student[key])</code></pre>
+  </div>
+
+  <div class="mb-10">
+    <h2 class="text-xl font-semibold mb-2">📝 Your Turn: Assignment</h2>
+    <p class="mb-2">Create a dictionary-based contact book! Here's what it should do:</p>
+    <ul class="list-decimal pl-6 mb-2">
+      <li>Ask the user for a name and phone number</li>
+      <li>Store them in a dictionary</li>
+      <li>Allow the user to enter multiple contacts</li>
+      <li>Print all contacts at the end</li>
+    </ul>
+    <p>Advanced idea: Use a loop and let the user type "done" when they want to stop.</p>
+  </div>
+
+  <button onclick="markLessonComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+    ✅ Mark Lesson as Complete
+  </button>
+  <a href="../dashboard.html" class="text-blue-600 underline block mt-4">← Back to Dashboard</a>
+
+  <script>
+    function markLessonComplete() {
+      let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
+      if (!completed.includes('lesson7')) {
+        completed.push('lesson7');
+        localStorage.setItem('completedLessons', JSON.stringify(completed));
+        alert('Lesson 7 marked as complete! ✅');
+      } else {
+        alert('You already completed this lesson.');
+      }
+    }
+  </script>
+
+  <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
+    Pyforus includes embedded videos from Khan Academy for educational use. We do not own or monetize these videos. All rights to the videos belong to Khan Academy.
+  </footer>
+</body>
+</html>

@@ -8,70 +8,69 @@
 </head>
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
 
+  <!-- Show previous score -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const prevScore = localStorage.getItem('quiz1to4Score');
-      if (prevScore !== null) {
+      const prev = localStorage.getItem('quiz1to4Score');
+      if (prev !== null) {
         const note = document.createElement('p');
         note.className = 'text-sm text-gray-500 mb-4';
-        note.textContent = `📊 Previous attempt: ${prevScore}%`;
-        const quizForm = document.getElementById('quizForm');
-        if (quizForm) {
-          quizForm.parentNode.insertBefore(note, quizForm);
+        note.textContent = `📊 Previous attempt: ${prev}%`;
+        const form = document.getElementById('quizForm');
+        if (form) {
+          form.parentNode.insertBefore(note, form);
         }
       }
     });
   </script>
 
-
-
   <h1 class="text-3xl font-bold mb-6">🧠 Quiz: Review of Lessons 1–4</h1>
-  <p class="mb-6">This quiz will check your understanding of the first 4 lessons. You need at least 60% to pass and unlock further content. Good luck!</p>
+  <p class="mb-6">This quiz will test your understanding of the first four lessons: Introduction to Python, Variables, Strings & Numbers, and User Input.</p>
 
   <form id="quizForm" class="space-y-8">
-    <!-- Question 1 -->
+    <!-- Q1 -->
     <div>
-      <p class="font-semibold mb-2">1. What function is used to display text in Python?</p>
-      <label><input type="radio" name="q1" value="c" class="mr-2">print()</label><br>
-      <label><input type="radio" name="q1" value="a" class="mr-2">echo()</label><br>
-      <label><input type="radio" name="q1" value="b" class="mr-2">display()</label><br>
-      <label><input type="radio" name="q1" value="d" class="mr-2">output()</label>
+      <p class="font-semibold mb-2">1. Which keyword is used to define a function in Python?</p>
+      <label><input type="radio" name="q1" value="a" class="mr-2">func</label><br>
+      <label><input type="radio" name="q1" value="b" class="mr-2">define</label><br>
+      <label><input type="radio" name="q1" value="c" class="mr-2">def</label><br>
+      <label><input type="radio" name="q1" value="d" class="mr-2">function</label>
     </div>
 
-    <!-- Question 2 -->
+    <!-- Q2 -->
     <div>
-      <p class="font-semibold mb-2">2. Which of these is a valid variable in Python?</p>
-      <label><input type="radio" name="q2" value="b" class="mr-2">age = 25</label><br>
-      <label><input type="radio" name="q2" value="a" class="mr-2">25 = age</label><br>
-      <label><input type="radio" name="q2" value="c" class="mr-2">var age = 25</label><br>
-      <label><input type="radio" name="q2" value="d" class="mr-2">int age = 25</label>
+      <p class="font-semibold mb-2">2. Which of the following is a valid Python variable name?</p>
+      <label><input type="radio" name="q2" value="a" class="mr-2">2nd_place</label><br>
+      <label><input type="radio" name="q2" value="b" class="mr-2">first-place</label><br>
+      <label><input type="radio" name="q2" value="c" class="mr-2">first_place</label><br>
+      <label><input type="radio" name="q2" value="d" class="mr-2">first place</label>
     </div>
 
-    <!-- Question 3 -->
+    <!-- Q3 -->
     <div>
-      <p class="font-semibold mb-2">3. What will the following code print?<br><code>name = "Ali"<br>print("Hello, " + name)</code></p>
-      <label><input type="radio" name="q3" value="c" class="mr-2">Hello, Ali</label><br>
-      <label><input type="radio" name="q3" value="a" class="mr-2">Ali Hello</label><br>
-      <label><input type="radio" name="q3" value="b" class="mr-2">name</label><br>
-      <label><input type="radio" name="q3" value="d" class="mr-2">Hello + name</label>
+      <p class="font-semibold mb-2">3. What is the result of <code>'3' + '4'</code> in Python?</p>
+      <label><input type="radio" name="q3" value="a" class="mr-2">7</label><br>
+      <label><input type="radio" name="q3" value="b" class="mr-2">34</label><br>
+      <label><input type="radio" name="q3" value="c" class="mr-2">Error</label><br>
+      <label><input type="radio" name="q3" value="d" class="mr-2">'7'</label>
     </div>
 
-    <!-- Question 4 -->
+    <!-- Q4 -->
     <div>
-      <p class="font-semibold mb-2">4. What type of value does <code>input()</code> return?</p>
-      <label><input type="radio" name="q4" value="a" class="mr-2">Always an integer</label><br>
-      <label><input type="radio" name="q4" value="b" class="mr-2">A float</label><br>
-      <label><input type="radio" name="q4" value="c" class="mr-2">A string</label><br>
-      <label><input type="radio" name="q4" value="d" class="mr-2">Depends on the user input</label>
+      <p class="font-semibold mb-2">4. What is the output of <code>5 // 2</code>?</p>
+      <label><input type="radio" name="q4" value="a" class="mr-2">2.5</label><br>
+      <label><input type="radio" name="q4" value="b" class="mr-2">3</label><br>
+      <label><input type="radio" name="q4" value="c" class="mr-2">2</label><br>
+      <label><input type="radio" name="q4" value="d" class="mr-2">Error</label>
     </div>
 
-    <!-- Question 5 -->
+    <!-- Q5 -->
     <div>
-      <p class="font-semibold mb-2">5. What will this code output?<br><code>print("3" + "2")</code></p>
-      <label><input type="radio" name="q5" value="a" class="mr-2">5</label><br>
-      <label><input type="radio" name="q5" value="b" class="mr-2">6</label><br>
-      <label><input type="radio" name="q5" value="c" class="mr-2">32</label><br>
-      <label><input type="radio" name="q5" value="d" class="mr-2">Error</label>
+      <p class="font-semibold mb-2">5. What type does the <code>input()</code> function return?</p>
+      <label><input type="radio" name="q5" value="a" class="mr-2">int</label><br>
+      <label><input type="radio" name="q5" value="b" class="mr-2">str</label><br>
+      <label><input type="radio" name="q5" value="c" class="mr-2">bool</label><br>
+      <label><input type="radio" name="q5" value="d" class="mr-2">float</label>
     </div>
 
     <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Submit Quiz</button>
@@ -80,103 +79,83 @@
   <div id="result" class="mt-8 text-lg font-semibold"></div>
 
   <button id="markQuizBtn" onclick="markQuizComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mt-4" style="display: none;">
-  ✅ Mark Quiz as Complete
+    ✅ Mark Quiz as Complete
   </button>
 
-  <a href="../dashboard.html" class="text-blue-600 underline block mt-4">← Back to Dashboard</a>
-
   <script>
-    document.getElementById('quizForm').addEventListener('submit', function (e) {
-      e.preventDefault();
+  document.getElementById('quizForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const answers = { q1: 'c', q2: 'c', q3: 'b', q4: 'c', q5: 'b' };
+    let score = 0;
 
-      const answers = {
-        q1: 'c',
-        q2: 'b',
-        q3: 'c',
-        q4: 'c',
-        q5: 'c'
-      };
+    // Clear previous highlights
+    document.querySelectorAll('.incorrect').forEach(el => el.classList.remove('bg-red-100', 'border', 'border-red-400', 'p-2', 'rounded'));
 
-      let score = 0;
-      let total = Object.keys(answers).length;
-
-      for (let q in answers) {
-        const selected = document.querySelector(`input[name="${q}"]:checked`);
-        if (selected && selected.value === answers[q]) {
-          score++;
+    for (let q in answers) {
+      const selected = document.querySelector(`input[name="${q}"]:checked`);
+      const questionDiv = document.querySelector(`input[name="${q}"]`).closest('div');
+      if (selected && selected.value === answers[q]) {
+        score++;
+      } else {
+        // Mark incorrect and show correct answer
+        questionDiv.classList.add('incorrect', 'bg-red-100', 'border', 'border-red-400', 'p-2', 'rounded');
+        const correctLabel = [...questionDiv.querySelectorAll('label')].find(label =>
+          label.querySelector('input')?.value === answers[q]
+        );
+        if (correctLabel && !questionDiv.querySelector('.correct-note')) {
+          const note = document.createElement('div');
+          note.className = 'text-sm text-green-600 mt-2 correct-note';
+          note.textContent = `✔ Correct answer: "${correctLabel.textContent.trim()}"`;
+          questionDiv.appendChild(note);
         }
       }
+    }
 
-      const percent = Math.round((score / total) * 100);
-      const passed = percent >= 60;
-      const resultDiv = document.getElementById('result');
+    const percent = Math.round((score / 5) * 100);
+    localStorage.setItem('quiz1to4Score', percent);
 
-    // Always update the latest score
-      localStorage.setItem('quiz1to4Score', percent);
+    const result = document.getElementById('result');
+    const submitBtn = document.querySelector('button[type="submit"]');
 
-      if (passed) {
-      // Avoid duplicate entries
-        let quizzes = JSON.parse(localStorage.getItem('completedQuizzes')) || [];
-        if (!quizzes.includes('lesson1to4')) {
-          quizzes.push('lesson1to4');
-          localStorage.setItem('completedQuizzes', JSON.stringify(quizzes));
-        }
+    if (percent >= 60) {
+      let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
+      if (!completed.includes('quiz1to4')) {
+        completed.push('quiz1to4');
+        localStorage.setItem('completedLessons', JSON.stringify(completed));
+      }
+      result.className = 'mt-8 text-green-600 font-semibold';
+      result.innerHTML = `✅ You passed with a score of ${percent}%. You can now continue.`;
+      document.getElementById('markQuizBtn').style.display = 'inline-block';
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    } else {
+      result.className = 'mt-8 text-red-600 font-semibold';
+      result.innerHTML = `❌ You scored ${percent}%. Review the lessons and <a href="#" id="try-again" class="underline text-blue-600">try again</a>.`;
+    }
+  });
 
-        resultDiv.innerHTML = `✅ You passed with a score of ${percent}%. You can now continue to the next lessons.`;
-        resultDiv.classList.remove('text-red-600');
-        resultDiv.classList.add('text-green-600');
-
-      // Show mark as complete button
-        document.getElementById('markQuizBtn').style.display = 'inline-block';
-
-      // Disable submit button
-        const submitBtn = document.querySelector('button[type="submit"]');
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
-        }
-
-      } else {
-        resultDiv.innerHTML = `❌ You scored ${percent}%. Please review the lessons and try again.<br><br>
-        <a href="#" id="try-again-link" class="text-blue-600 underline">🔁 Try Again</a>`;
-        resultDiv.classList.remove('text-green-600');
-        resultDiv.classList.add('text-red-600');
-        }
-        });
-      // Add event listener to reset form on Try Again click
   document.addEventListener('click', function (e) {
-    if (e.target.matches('#try-again-link')) {
+    if (e.target.id === 'try-again') {
       e.preventDefault();
       document.getElementById('quizForm').reset();
       document.getElementById('result').innerHTML = '';
       document.getElementById('markQuizBtn').style.display = 'none';
-      const submitBtn = document.querySelector('button[type="submit"]');
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-      }
+
+      document.querySelectorAll('.incorrect').forEach(el => {
+        el.classList.remove('bg-red-100', 'border', 'border-red-400', 'p-2', 'rounded');
+        const note = el.querySelector('.correct-note');
+        if (note) note.remove();
+      });
+
+      const btn = document.querySelector('button[type="submit"]');
+      btn.disabled = false;
+      btn.classList.remove('opacity-50', 'cursor-not-allowed');
     }
   });
 
-  </script>
-
-  <script>
   function markQuizComplete() {
-    let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
-    if (!completed.includes('quiz1to4')) {
-      completed.push('quiz1to4');
-      localStorage.setItem('completedLessons', JSON.stringify(completed));
-      alert('Quiz marked as complete! ✅');
-    } else {
-      alert('You already completed this quiz.');
-    }
+    alert('Quiz marked as complete! ✅');
   }
-  </script>
-
-  <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
-    Pyforus includes embedded videos from Khan Academy for educational use. We do not own or monetize these videos. All rights to the videos belong to Khan Academy. 
-    <br />
-    Our platform offers custom lessons, assignments, quizzes, and optional certification.
-  </footer>
+</script>
 </body>
 </html>
