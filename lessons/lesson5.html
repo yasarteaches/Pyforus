@@ -11,14 +11,18 @@
   <h1 class="text-3xl font-bold mb-4">🎨 Lesson 5: Drawing with Turtle</h1>
   <p class="mb-6 text-gray-700">Welcome to your first graphics lesson! Today, we will explore Python's <code>turtle</code> module, which lets you draw on the screen using code.</p>
 
-  <!-- Video -->
-  <div class="relative pt-[56.25%] mb-6">
-    <iframe class="absolute top-0 left-0 w-full h-full rounded-xl"
-      src="https://www.youtube.com/embed/p7VA3CK90o4"
-      title="Python Turtle Graphics Tutorial (Tech with Tim)"
-      allowfullscreen>
-    </iframe>
-  </div>
+    <!-- Turtle Video -->
+    <div class="relative pt-[56.25%] mb-6">
+     <iframe class="absolute top-0 left-0 w-full h-full rounded-xl"
+        src="https://es.khanacademy.org/python-program/turtle-experiment/5341181338632192"
+        title="Turtle Experiment – Khan Academy"
+        allowfullscreen>
+     </iframe>
+    </div>
+
+
+
+
 
   <div class="mb-6">
     <h2 class="text-xl font-semibold mb-2">📘 What is Turtle?</h2>
@@ -68,12 +72,18 @@ window.mainloop()</code></pre>
       if (!completed.includes('lesson5')) {
         completed.push('lesson5');
         localStorage.setItem('completedLessons', JSON.stringify(completed));
-        alert('Lesson marked as complete! ✅');
-      } else {
-        alert('You already completed this lesson.');
+      }   
+
+      let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
+      if (!assignments.includes('lesson5')) {
+        assignments.push('lesson5');
+        localStorage.setItem('completedAssignments', JSON.stringify(assignments));
       }
+
+      alert('Lesson 5 marked as complete! ✅');
     }
   </script>
+
 
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
     Pyforus includes embedded videos from YouTube or Khan Academy for educational use. We do not own or monetize these videos. All rights belong to their creators.

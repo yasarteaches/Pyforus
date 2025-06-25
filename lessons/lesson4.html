@@ -10,14 +10,15 @@
 
   <h1 class="text-3xl font-bold mb-4">🔧 Lesson 4: Functions</h1>
 
-  <!-- Video -->
+  <!-- Functions Video -->
   <div class="relative pt-[56.25%] mb-6">
     <iframe class="absolute top-0 left-0 w-full h-full rounded-xl"
-      src="https://www.youtube.com/embed/TqPzwenhMj0"
-      title="Python Tutorial: Functions – Khan Academy via FreeCodeCamp"
+      src="https://www.youtube.com/embed/UmNKiV7Lekk"
+      title="Functions – Khan Academy"
       allowfullscreen>
     </iframe>
   </div>
+
 
   <!-- Objectives -->
   <div class="mb-6">
@@ -81,12 +82,18 @@ print(square(7))</code></pre>
       if (!completed.includes(lessonId)) {
         completed.push(lessonId);
         localStorage.setItem('completedLessons', JSON.stringify(completed));
-        alert("Lesson marked as complete!");
-      } else {
-        alert("You've already completed this lesson.");
       }
+
+      let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
+      if (!assignments.includes(lessonId)) {
+        assignments.push(lessonId);
+        localStorage.setItem('completedAssignments', JSON.stringify(assignments));
+      }
+
+      alert('Lesson marked as complete! ✅');
     }
   </script>
+
 
   <!-- Footer -->
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">

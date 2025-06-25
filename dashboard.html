@@ -27,7 +27,9 @@
 
   const completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
   const assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
-  const score = parseInt(localStorage.getItem('quiz1to4Score')) || null;
+  const storedScore = localStorage.getItem('quiz1to4Score');
+  const score = storedScore !== null ? parseInt(storedScore) : null;
+
 
   const list = document.getElementById('lessonList');
 

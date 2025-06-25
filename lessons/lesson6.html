@@ -11,15 +11,15 @@
   <h1 class="text-3xl font-bold mb-4">📦 Lesson 6: Data & Lists</h1>
   <p class="mb-6">In this lesson, you'll learn about Python's list data structure — one of the most powerful tools in your programming toolbox. Lists can store groups of data, making it easy to organize and work with information efficiently.</p>
 
-  <!-- Video -->
-  <h2 class="text-xl font-semibold mb-2">🎥 Watch: Python Lists Explained</h2>
-  <div class="relative pt-[56.25%] mb-6">
-    <iframe class="absolute top-0 left-0 w-full h-full rounded-xl"
-      src="https://www.youtube.com/embed/W8KRzm-HUcc"
-      title="Python Lists Tutorial (Programming with Mosh)"
-      allowfullscreen>
-    </iframe>
-  </div>
+  <!-- Lists Video -->
+    <div class="relative pt-[56.25%] mb-6">
+     <iframe class="absolute top-0 left-0 w-full h-full rounded-xl"
+        src="https://www.khanacademy.org/computing/in-class-11-computer-science/xab724c3e878917b8%3Alists/xab724c3e878917b8%3Aintroduction-to-lists/v/python-lists"
+        title="Introduction to Lists – Khan Academy"
+        allowfullscreen>
+     </iframe>
+    </div>
+
 
   <h2 class="text-xl font-semibold mb-2">🔍 What is a List?</h2>
   <p class="mb-4">A list is a collection of items. You can store numbers, strings, or even other lists in a list. Lists are created using square brackets <code>[]</code>.</p>
@@ -63,12 +63,18 @@ print(numbers[:2])     # [1, 3]</code></pre>
       if (!completed.includes('lesson6')) {
         completed.push('lesson6');
         localStorage.setItem('completedLessons', JSON.stringify(completed));
-        alert('Lesson marked as complete! ✅');
-      } else {
-        alert('You already completed this lesson.');
       }
+
+      let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
+      if (!assignments.includes('lesson6')) {
+        assignments.push('lesson6');
+        localStorage.setItem('completedAssignments', JSON.stringify(assignments));
+      }
+
+      alert('Lesson 6 marked as complete! ✅');
     }
   </script>
+
 
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
     Pyforus includes embedded videos from YouTube or Khan Academy for educational use. We do not own or monetize these videos. All rights belong to their creators.
