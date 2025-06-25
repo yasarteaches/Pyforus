@@ -11,6 +11,14 @@
   <h1 class="text-3xl font-bold mb-4">🎨 Lesson 5: Drawing with Turtle</h1>
   <p class="mb-6 text-gray-700">Welcome to your first graphics lesson! Today, we will explore Python's <code>turtle</code> module, which lets you draw on the screen using code.</p>
 
+  <!-- Video -->
+  <div class="relative pt-[56.25%] mb-6">
+    <iframe class="absolute top-0 left-0 w-full h-full rounded-xl"
+      src="https://www.youtube.com/embed/p7VA3CK90o4"
+      title="Python Turtle Graphics Tutorial (Tech with Tim)"
+      allowfullscreen>
+    </iframe>
+  </div>
 
   <div class="mb-6">
     <h2 class="text-xl font-semibold mb-2">📘 What is Turtle?</h2>
@@ -19,7 +27,7 @@
 
   <div class="mb-6">
     <h2 class="text-xl font-semibold mb-2">💻 Example Code</h2>
-    <pre class="bg-gray-100 p-4 rounded"><code>import turtle
+    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code>import turtle
 
 window = turtle.Screen()
 my_turtle = turtle.Turtle()
@@ -34,7 +42,7 @@ window.mainloop()</code></pre>
 
   <div class="mb-6">
     <h2 class="text-xl font-semibold mb-2">🧠 Try This</h2>
-    <ul class="list-disc list-inside">
+    <ul class="list-disc list-inside text-gray-800">
       <li>Make the turtle draw a square.</li>
       <li>Change the color of the turtle's pen.</li>
       <li>Make the turtle draw a triangle.</li>
@@ -42,14 +50,18 @@ window.mainloop()</code></pre>
   </div>
 
   <div class="mb-6">
-    <h2 class="text-xl font-semibold mb-2">📌 Assignment</h2>
-    <p>Write a Python program that uses the turtle to draw a house-shaped figure (square + triangle roof). Mark the lesson complete when done.</p>
+    <h2 class="text-xl font-semibold mb-2">📝 Assignment</h2>
+    <p>Write a Python program that uses the turtle to draw a house-shaped figure (a square + triangle roof). Mark the lesson complete when done.</p>
   </div>
 
+  <!-- Mark Complete -->
   <button onclick="markLessonComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
     ✅ Mark Lesson as Complete
   </button>
 
+  <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
+
+  <!-- Script -->
   <script>
     function markLessonComplete() {
       let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
@@ -64,7 +76,7 @@ window.mainloop()</code></pre>
   </script>
 
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
-    Pyforus includes embedded videos from Khan Academy for educational use. We do not own or monetize these videos. All rights to the videos belong to Khan Academy.
+    Pyforus includes embedded videos from YouTube or Khan Academy for educational use. We do not own or monetize these videos. All rights belong to their creators.
   </footer>
 
 </body>

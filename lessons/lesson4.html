@@ -1,39 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lesson 4: Functions</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
-  <h1 class="text-3xl font-bold mb-4">Lesson 4: Functions</h1>
 
-  <!-- Khan Academy Video Placeholder -->
-  <div class="relative pt-[56.25%]">
-    <iframe class="w-full aspect-video rounded-xl"
-      src="https://www.khanacademy.org/python-program/user-input/5615899540111360"
-      title="User Input – Khan Academy"
+  <h1 class="text-3xl font-bold mb-4">🔧 Lesson 4: Functions</h1>
+
+  <!-- Video -->
+  <div class="relative pt-[56.25%] mb-6">
+    <iframe class="absolute top-0 left-0 w-full h-full rounded-xl"
+      src="https://www.youtube.com/embed/TqPzwenhMj0"
+      title="Python Tutorial: Functions – Khan Academy via FreeCodeCamp"
       allowfullscreen>
     </iframe>
   </div>
 
-
   <!-- Objectives -->
   <div class="mb-6">
-    <h2 class="text-xl font-semibold mb-2">📌 Objectives</h2>
-    <ul class="list-disc list-inside space-y-1">
-      <li>Understand what functions are and why we use them.</li>
-      <li>Learn how to define and call a function in Python.</li>
-      <li>Explore parameters and return values.</li>
+    <h2 class="text-xl font-semibold mb-2">🎯 Learning Objectives</h2>
+    <ul class="list-disc list-inside space-y-1 text-gray-800">
+      <li>Understand what functions are and why we use them</li>
+      <li>Learn how to define and call a function in Python</li>
+      <li>Explore parameters and return values</li>
     </ul>
   </div>
 
   <!-- Code Examples -->
   <div class="mb-6">
     <h2 class="text-xl font-semibold mb-2">💻 Code Examples</h2>
-    <pre class="bg-gray-100 p-4 rounded"><code># Defining a function
-
+    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code># Defining a function
 def greet():
     print("Hello, welcome!")
 
@@ -56,10 +55,15 @@ print(result)</code></pre>
 
   <!-- Assignment -->
   <div class="mb-6">
-    <h2 class="text-xl font-semibold mb-2">📝 Assignment</h2>
+    <h2 class="text-xl font-semibold mb-2">📝 Your Assignment</h2>
     <p class="mb-2">Create a function named <code>square</code> that takes a number and returns its square. Then use it to print the square of 7.</p>
-    <pre class="bg-gray-100 p-4 rounded"><code># Your turn!
-# Write the function and print the result of square(7)</code></pre>
+    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code># Your turn!
+# Write the function and print the result of square(7)
+
+def square(n):
+    return n * n
+
+print(square(7))</code></pre>
   </div>
 
   <!-- Mark Complete Button -->
@@ -67,8 +71,10 @@ print(result)</code></pre>
     ✅ Mark as Complete
   </button>
 
+  <!-- Back to Dashboard -->
   <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
 
+  <!-- Completion Script -->
   <script>
     function markComplete(lessonId) {
       let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
@@ -81,5 +87,11 @@ print(result)</code></pre>
       }
     }
   </script>
+
+  <!-- Footer -->
+  <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
+    Pyforus includes embedded videos from Khan Academy or YouTube for educational use. We do not own or monetize these videos.
+  </footer>
+
 </body>
 </html>

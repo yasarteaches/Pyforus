@@ -7,51 +7,73 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
+
   <h1 class="text-3xl font-bold mb-4">🔁 Lesson 3: Loops (for & while)</h1>
 
   <p class="mb-6">Loops let us repeat actions in Python. We'll cover both <code>for</code> and <code>while</code> loops and learn when to use each one.</p>
 
-  <div class="relative pt-[56.25%]">
-    <iframe class="w-full aspect-video rounded-xl"
-      src="https://www.youtube.com/embed/[VIDEO_ID]"
-      title="Fun with Strings – Khan Academy"
+  <!-- Embedded Khan Academy Video -->
+  <div class="relative pt-[56.25%] mb-6">
+    <iframe class="absolute top-0 left-0 w-full h-full rounded-xl"
+      src="https://www.youtube.com/embed/Vv7ZkBla8R8"
+      title="Loops: while and for – Khan Academy"
       allowfullscreen>
     </iframe>
   </div>
 
-
+  <!-- Objectives -->
   <div class="mb-6">
-    <h2 class="text-2xl font-semibold mb-2">📌 Objectives</h2>
-    <ul class="list-disc list-inside">
+    <h2 class="text-xl font-semibold mb-2">🎯 Learning Objectives</h2>
+    <ul class="list-disc list-inside text-gray-800">
       <li>Understand what loops are and why we use them</li>
       <li>Write <code>for</code> loops to iterate over ranges or lists</li>
       <li>Use <code>while</code> loops to repeat based on a condition</li>
     </ul>
   </div>
 
+  <!-- Code Examples -->
   <div class="mb-6">
-    <h2 class="text-2xl font-semibold mb-2">💡 Examples</h2>
+    <h2 class="text-xl font-semibold mb-2">💻 Code Examples</h2>
     <p class="mb-2">Here is a simple <code>for</code> loop:</p>
-    <pre class="bg-gray-100 p-4 rounded"><code>for i in range(5):
-  print(i)</code></pre>
+    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code>for i in range(5):
+    print(i)</code></pre>
 
     <p class="mt-4 mb-2">And a basic <code>while</code> loop:</p>
-    <pre class="bg-gray-100 p-4 rounded"><code>count = 0
+    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code>count = 0
 while count < 5:
-  print(count)
-  count += 1</code></pre>
+    print(count)
+    count += 1</code></pre>
   </div>
 
+  <!-- Assignment -->
   <div class="mb-6">
-    <h2 class="text-2xl font-semibold mb-2">🧪 Assignment</h2>
+    <h2 class="text-xl font-semibold mb-2">📝 Your Assignment</h2>
     <p class="mb-2">Create a program that asks the user to enter a number and then prints all numbers from 1 to that number using a <code>for</code> loop.</p>
-    <p>Then add another part that uses a <code>while</code> loop to count down from that number to 1.</p>
+    <p class="mb-2">Then add another part that uses a <code>while</code> loop to count down from that number to 1.</p>
+
+    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code># Your code here:
+
+# FOR LOOP
+num = int(input("Enter a number: "))
+for i in range(1, num + 1):
+    print(i)
+
+# WHILE LOOP
+count = num
+while count > 0:
+    print(count)
+    count -= 1</code></pre>
   </div>
 
-  <button id="markCompleteBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+  <!-- Mark Complete Button -->
+  <button id="markCompleteBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mt-4">
     ✅ Mark as Complete
   </button>
 
+  <!-- Back to Dashboard -->
+  <a href="dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
+
+  <!-- Completion Script -->
   <script>
     const btn = document.getElementById('markCompleteBtn');
     btn.addEventListener('click', () => {
@@ -65,5 +87,11 @@ while count < 5:
       }
     });
   </script>
+
+  <!-- Footer -->
+  <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
+    Pyforus includes embedded videos from Khan Academy for educational use. We do not own or monetize these videos. All rights to the videos belong to Khan Academy.
+  </footer>
+
 </body>
 </html>
