@@ -10,15 +10,31 @@
 
   <h1 class="text-3xl font-bold mb-4">🐍 Lesson 1: Introduction to Python</h1>
 
-  <!-- Embedded Khan Academy Video -->
-  <div class="relative pt-[56.25%] mb-6">
-    <iframe class="w-full aspect-video rounded-xl"
-      src="https://www.youtube.com/embed/52RHZdBSjTw"
-      title="Variables and assignment – Khan Academy"
-      allowfullscreen>
-    </iframe>
+  <!-- Introduction -->
+  <p class="mb-6 text-gray-800">
+    Welcome to your first step into the world of Python! Python is one of the most popular and beginner-friendly programming languages used in fields ranging from web development and automation to data science, AI, and robotics. It is known for its simple and readable syntax, making it an ideal choice for newcomers.
+  </p>
+
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">📘 Why Python?</h2>
+    <ul class="list-disc list-inside text-gray-800">
+      <li>Easy to read and write</li>
+      <li>Large community and lots of tutorials</li>
+      <li>Used by companies like Google, Netflix, and NASA</li>
+      <li>Works across platforms (Windows, Mac, Linux)</li>
+    </ul>
   </div>
 
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">🧠 What Will You Learn?</h2>
+    <p>In this lesson, you will:</p>
+    <ul class="list-disc list-inside text-gray-800">
+      <li>Write and run your first Python program</li>
+      <li>Understand basic concepts like output and variables</li>
+      <li>Use strings and numbers</li>
+      <li>Get ready for interactive Python lessons ahead!</li>
+    </ul>
+  </div>
 
   <!-- Objectives -->
   <h2 class="text-xl font-semibold mb-2">🎯 Learning Objectives</h2>
@@ -40,6 +56,21 @@ age = 16
 print(name)
 print(age)</code></pre>
 
+  <!-- More Concepts -->
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">📌 More Examples</h2>
+    <p class="mb-2">You can also do math with Python:</p>
+    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code>print(3 + 2)      # Addition
+print(10 - 4)     # Subtraction
+print(6 * 7)      # Multiplication
+print(20 / 5)     # Division</code></pre>
+
+    <p class="mt-4 mb-2">And combine text using variables:</p>
+    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code>greeting = "Hi"
+name = "Ali"
+print(greeting + ", " + name + "!")</code></pre>
+  </div>
+
   <!-- Assignment -->
   <h2 class="text-xl font-semibold mb-2">📝 Your Assignment</h2>
   <p class="mb-4">Write a Python program that prints your name and your favorite number. Here's a starter:</p>
@@ -48,11 +79,16 @@ print("My name is ___")
 print("My favorite number is ___")</code></pre>
 
   <!-- Mark Complete -->
-  <button id="completeBtn" class="bg-green-600 text-white px-4 py-2 mt-6 rounded hover:bg-green-700">
+  <button id="completeBtn" class="bg-green-600 text-white px-4 py-2 mt-6 rounded hover:bg-green-700" onclick="markLessonComplete()">
     ✅ Mark Lesson as Complete
   </button>
 
+  <!-- Mark Assignment Complete Button -->
+  <button id="markAssignmentBtn" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
+    📝 Mark Assignment as Complete
+  </button>
 
+  <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
 
   <script>
     function markLessonComplete() {
@@ -70,17 +106,10 @@ print("My favorite number is ___")</code></pre>
 
       alert('Lesson 1 marked as complete! ✅');
     }
-  </script>
 
-  <!-- Mark Assignment Complete Button -->
-  <button id="markAssignmentBtn" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
-    📝 Mark Assignment as Complete
-  </button>
-
-  <script>
     document.getElementById("markAssignmentBtn").addEventListener("click", () => {
       let assignments = JSON.parse(localStorage.getItem("completedAssignments")) || [];
-      const lessonId = window.location.pathname.split("/").pop().split(".")[0]; // e.g., lesson1
+      const lessonId = window.location.pathname.split("/").pop().split(".")[0];
 
       if (!assignments.includes(lessonId)) {
         assignments.push(lessonId);
@@ -92,17 +121,10 @@ print("My favorite number is ___")</code></pre>
     });
   </script>
 
-    <!-- FIXED: Proper back link -->
-  <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
-
-
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
-    Disclaimer:
-  Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes. Pyforus does not claim ownership of any video content provided by Khan Academy and does not monetize, alter, or redistribute their material in any form.
-
-  Khan Academy is a nonprofit organization that offers free educational resources to learners worldwide. All rights to the embedded videos, trademarks, and related content remain the exclusive property of Khan Academy. We strongly encourage users to visit and support Khan Academy directly at www.khanacademy.org.
-
-
+    <strong>Disclaimer:</strong><br>
+    Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes. Pyforus does not claim ownership of any video content provided by Khan Academy and does not monetize, alter, or redistribute their material in any form.<br><br>
+    Khan Academy is a nonprofit organization that offers free educational resources to learners worldwide. All rights to the embedded videos, trademarks, and related content remain the exclusive property of Khan Academy. We strongly encourage users to visit and support Khan Academy directly at <a href="https://www.khanacademy.org" class="underline text-blue-600">www.khanacademy.org</a>.
   </footer>
 
 </body>
