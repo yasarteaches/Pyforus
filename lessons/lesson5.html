@@ -11,50 +11,61 @@
   <h1 class="text-3xl font-bold mb-4">🎨 Lesson 5: Drawing with Turtle</h1>
   <p class="mb-6 text-gray-700">Welcome to your first graphics lesson! Today, we will explore Python's <code>turtle</code> module, which lets you draw on the screen using code.</p>
 
-    <!-- Turtle Video -->
-    <div class="relative pt-[56.25%] mb-6">
-     <iframe class="absolute top-0 left-0 w-full h-full rounded-xl"
-      src="https://www.youtube.com/embed/p7CiFhiTdvY"
-      title="Python Turtle Graphics Tutorial"
-      allowfullscreen></iframe>
-    </div>
-
-
-
-
-
   <div class="mb-6">
     <h2 class="text-xl font-semibold mb-2">📘 What is Turtle?</h2>
-    <p>The <code>turtle</code> module lets you control a turtle that draws on the screen. You can move it forward, turn it, change colors, and much more!</p>
+    <p><code>turtle</code> is a built-in Python library that provides a way to draw using code. It opens a window and shows a turtle icon that you can control to draw shapes and patterns.</p>
+    <p class="mt-2">It’s especially useful for beginners to understand loops, movement, and even angles while creating visual feedback instantly.</p>
   </div>
 
   <div class="mb-6">
-    <h2 class="text-xl font-semibold mb-2">💻 Example Code</h2>
+    <h2 class="text-xl font-semibold mb-2">🔧 Setting Up Turtle</h2>
+    <p>To use turtle, you don't need to install anything if you're using standard Python. Just use <code>import turtle</code> in your code. Make sure you're running your script in a Python environment that supports graphical output (like a local IDE, not most online editors).</p>
+  </div>
+
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">💻 Basic Example</h2>
     <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code>import turtle
 
+# Create screen and turtle object
 window = turtle.Screen()
 my_turtle = turtle.Turtle()
 
+# Draw an L-shape
 my_turtle.forward(100)
 my_turtle.left(90)
 my_turtle.forward(100)
 
+# Keep the window open
 window.mainloop()</code></pre>
-    <p class="mt-2 text-sm text-gray-600">This code creates a window and makes the turtle draw a simple L-shape.</p>
+    <p class="mt-2 text-sm text-gray-600">This code opens a window and makes the turtle draw an L-shape.</p>
   </div>
 
   <div class="mb-6">
-    <h2 class="text-xl font-semibold mb-2">🧠 Try This</h2>
+    <h2 class="text-xl font-semibold mb-2">🧠 Try It Yourself</h2>
     <ul class="list-disc list-inside text-gray-800">
-      <li>Make the turtle draw a square.</li>
-      <li>Change the color of the turtle's pen.</li>
-      <li>Make the turtle draw a triangle.</li>
+      <li>Draw a square using a <code>for</code> loop.</li>
+      <li>Change the turtle's color using <code>my_turtle.pencolor("blue")</code>.</li>
+      <li>Make the turtle draw a triangle or star.</li>
+    </ul>
+  </div>
+
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">📘 Tips & Tricks</h2>
+    <ul class="list-disc list-inside text-gray-800">
+      <li><code>my_turtle.speed(1)</code> sets how fast the turtle moves.</li>
+      <li><code>my_turtle.penup()</code> and <code>pendown()</code> allow you to move the turtle without drawing.</li>
+      <li><code>window.bgcolor("lightblue")</code> changes the background color.</li>
     </ul>
   </div>
 
   <div class="mb-6">
     <h2 class="text-xl font-semibold mb-2">📝 Assignment</h2>
-    <p>Write a Python program that uses the turtle to draw a house-shaped figure (a square + triangle roof). Mark the lesson complete when done.</p>
+    <p>Write a Python program that uses the turtle module to draw a simple house:</p>
+    <ul class="list-decimal list-inside text-gray-800 mt-2">
+      <li>Draw a square as the base of the house.</li>
+      <li>Draw a triangle roof on top.</li>
+      <li>Use different colors for the house and the roof.</li>
+    </ul>
   </div>
 
   <!-- Mark Complete -->
@@ -62,16 +73,19 @@ window.mainloop()</code></pre>
     ✅ Mark Lesson as Complete
   </button>
 
-  
+  <!-- Mark Assignment Complete Button -->
+  <button id="markAssignmentBtn" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
+    📝 Mark Assignment as Complete
+  </button>
 
-  <!-- Script -->
+  <!-- Scripts -->
   <script>
     function markLessonComplete() {
       let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
       if (!completed.includes('lesson5')) {
         completed.push('lesson5');
         localStorage.setItem('completedLessons', JSON.stringify(completed));
-      }   
+      }
 
       let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
       if (!assignments.includes('lesson5')) {
@@ -81,17 +95,10 @@ window.mainloop()</code></pre>
 
       alert('Lesson 5 marked as complete! ✅');
     }
-  </script>
 
-  <!-- Mark Assignment Complete Button -->
-  <button id="markAssignmentBtn" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
-    📝 Mark Assignment as Complete
-  </button>
-
-  <script>
     document.getElementById("markAssignmentBtn").addEventListener("click", () => {
       let assignments = JSON.parse(localStorage.getItem("completedAssignments")) || [];
-      const lessonId = window.location.pathname.split("/").pop().split(".")[0]; // e.g., lesson1
+      const lessonId = window.location.pathname.split("/").pop().split(".")[0];
 
       if (!assignments.includes(lessonId)) {
         assignments.push(lessonId);
@@ -103,11 +110,10 @@ window.mainloop()</code></pre>
     });
   </script>
 
-    <!-- FIXED: Proper back link -->
+  <!-- Back to Dashboard -->
   <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
 
-
-
+  <!-- Footer -->
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
     <strong>Disclaimer:</strong><br>
     Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes. Pyforus does not claim ownership of any video content provided by Khan Academy and does not monetize, alter, or redistribute their material in any form.<br><br>
