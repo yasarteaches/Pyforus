@@ -51,21 +51,24 @@ print("My favorite number is ___")</code></pre>
     ✅ Mark Lesson as Complete
   </button>
 
-  <!-- FIXED: Proper back link -->
-  <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
+
 
   <script>
-    const completeBtn = document.getElementById('completeBtn');
-    completeBtn.addEventListener('click', () => {
+    function markLessonComplete() {
       let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
       if (!completed.includes('lesson1')) {
         completed.push('lesson1');
         localStorage.setItem('completedLessons', JSON.stringify(completed));
-        alert('Lesson marked as complete! ✅');
-      } else {
-        alert('You already completed this lesson.');
+      }   
+
+      let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
+      if (!assignments.includes('lesson1')) {
+        assignments.push('lesson1');
+        localStorage.setItem('completedAssignments', JSON.stringify(assignments));
       }
-    });
+
+      alert('Lesson 1 marked as complete! ✅');
+    }
   </script>
 
   <!-- Mark Assignment Complete Button -->
@@ -87,6 +90,9 @@ print("My favorite number is ___")</code></pre>
       }
     });
   </script>
+
+    <!-- FIXED: Proper back link -->
+  <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
 
 
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
