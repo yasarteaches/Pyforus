@@ -77,22 +77,43 @@ print(square(7))</code></pre>
 
   <!-- Completion Script -->
   <script>
-    function markComplete(lessonId) {
+    function markLessonComplete() {
       let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
-      if (!completed.includes(lessonId)) {
-        completed.push(lessonId);
+      if (!completed.includes('lesson4')) {
+        completed.push('lesson4');
         localStorage.setItem('completedLessons', JSON.stringify(completed));
-      }
+      }   
 
       let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
-      if (!assignments.includes(lessonId)) {
-        assignments.push(lessonId);
+      if (!assignments.includes('lesson4')) {
+        assignments.push('lesson4');
         localStorage.setItem('completedAssignments', JSON.stringify(assignments));
       }
 
-      alert('Lesson marked as complete! ✅');
+      alert('Lesson 4 marked as complete! ✅');
     }
   </script>
+
+  <!-- Mark Assignment Complete Button -->
+  <button id="markAssignmentBtn" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
+    📝 Mark Assignment as Complete
+  </button>
+
+  <script>
+    document.getElementById("markAssignmentBtn").addEventListener("click", () => {
+      let assignments = JSON.parse(localStorage.getItem("completedAssignments")) || [];
+      const lessonId = window.location.pathname.split("/").pop().split(".")[0]; // e.g., lesson1
+
+      if (!assignments.includes(lessonId)) {
+        assignments.push(lessonId);
+        localStorage.setItem("completedAssignments", JSON.stringify(assignments));
+        alert("Assignment marked as complete! ✅");
+      } else {
+        alert("You already completed this assignment.");
+      }
+    });
+  </script>
+
 
 
   <!-- Footer -->

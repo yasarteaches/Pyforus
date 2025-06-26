@@ -70,18 +70,43 @@ age = int(input("Enter your age: "))
   <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
 
   <script>
-    const completeBtn = document.getElementById('completeBtn');
-    completeBtn.addEventListener('click', () => {
+    function markLessonComplete() {
       let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
       if (!completed.includes('lesson2')) {
         completed.push('lesson2');
         localStorage.setItem('completedLessons', JSON.stringify(completed));
-        alert('Lesson marked as complete! ✅');
+      }   
+
+      let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
+      if (!assignments.includes('lesson2')) {
+        assignments.push('lesson2');
+        localStorage.setItem('completedAssignments', JSON.stringify(assignments));
+      }
+
+      alert('Lesson 2 marked as complete! ✅');
+    }
+  </script>
+
+  <!-- Mark Assignment Complete Button -->
+  <button id="markAssignmentBtn" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
+    📝 Mark Assignment as Complete
+  </button>
+
+  <script>
+    document.getElementById("markAssignmentBtn").addEventListener("click", () => {
+      let assignments = JSON.parse(localStorage.getItem("completedAssignments")) || [];
+      const lessonId = window.location.pathname.split("/").pop().split(".")[0]; // e.g., lesson1
+
+      if (!assignments.includes(lessonId)) {
+        assignments.push(lessonId);
+        localStorage.setItem("completedAssignments", JSON.stringify(assignments));
+          alert("Assignment marked as complete! ✅");
       } else {
-        alert('You already completed this lesson.');
+        alert("You already completed this assignment.");
       }
     });
   </script>
+
 
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
     Disclaimer:
