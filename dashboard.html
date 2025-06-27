@@ -13,85 +13,91 @@
   </div>
 
   <script>
-  const lessons = [
-  { id: 'lesson1', title: 'Lesson 1: Introduction to Python', url: 'lessons/lesson1.html' },
-  { id: 'lesson2', title: 'Lesson 2: Control Flow (if/else)', url: 'lessons/lesson2.html' },
-  { id: 'lesson3', title: 'Lesson 3: Loops (for & while)', url: 'lessons/lesson3.html' },
-  { id: 'lesson4', title: 'Lesson 4: Functions', url: 'lessons/lesson4.html' },
-  { id: 'quiz1to4', title: 'Quiz: Lessons 1–4', url: 'lessons/lesson1-4-quiz.html' },
-  { id: 'lesson5', title: 'Lesson 5: Drawing with Turtle', url: 'lessons/lesson5.html' },
-  { id: 'lesson6', title: 'Lesson 6: Data & Lists', url: 'lessons/lesson6.html' },
-  { id: 'lesson7', title: 'Lesson 7: Dictionaries & Advanced Structures', url: 'lessons/lesson7.html' },
-  { id: 'finalQuiz', title: 'Final Quiz', url: 'lessons/final-quiz.html' },
-  { id: 'certificate', title: '🎓 Certificate of Completion', url: 'certificate.html' }
-];
+    const lessons = [
+      { id: 'lesson1', title: 'Lesson 1: Introduction to Python', url: 'lessons/lesson1.html' },
+      { id: 'lesson2', title: 'Lesson 2: Control Flow (if/else)', url: 'lessons/lesson2.html' },
+      { id: 'lesson3', title: 'Lesson 3: Loops (for & while)', url: 'lessons/lesson3.html' },
+      { id: 'lesson4', title: 'Lesson 4: Functions', url: 'lessons/lesson4.html' },
+      { id: 'quiz1to4', title: 'Quiz: Lessons 1–4', url: 'lessons/lesson1-4-quiz.html' },
+      { id: 'lesson5', title: 'Lesson 5: Drawing with Turtle', url: 'lessons/lesson5.html' },
+      { id: 'lesson6', title: 'Lesson 6: Data & Lists', url: 'lessons/lesson6.html' },
+      { id: 'lesson7', title: 'Lesson 7: Dictionaries & Advanced Structures', url: 'lessons/lesson7.html' },
+      { id: 'finalQuiz', title: 'Final Quiz', url: 'lessons/final-quiz.html' },
+      { id: 'certificate', title: '🎓 Certificate of Completion', url: 'certificate.html' }
+    ];
 
+    const completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
+    const assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
 
-  const completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
-  const assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
-  const storedScore = localStorage.getItem('quiz1to4Score');
-  const score = storedScore !== null ? parseInt(storedScore) : null;
+    const quiz1to4Score = localStorage.getItem('quiz1to4Score');
+    const score = quiz1to4Score !== null ? parseInt(quiz1to4Score) : null;
 
+    const finalScore = localStorage.getItem('finalScore');
+    const finalPassed = finalScore !== null && parseInt(finalScore) >= 60;
 
-  const list = document.getElementById('lessonList');
+    const list = document.getElementById('lessonList');
 
-  lessons.forEach((lesson, index) => {
-    let isUnlocked = false;
+    lessons.forEach((lesson, index) => {
+      let isUnlocked = false;
 
-    if (index === 0) {
-      isUnlocked = true;
-    } else if (lesson.id === 'lesson5') {
-      // Lesson 5 unlock logic: quiz must be completed and score >= 60
-      isUnlocked = completed.includes('quiz1to4') && score >= 60;
-    } else {
-      isUnlocked = completed.includes(lessons[index - 1].id);
-    }
+      if (index === 0) {
+        isUnlocked = true;
+      } else if (lesson.id === 'lesson5') {
+        isUnlocked = completed.includes('quiz1to4') && score >= 60;
+      } else if (lesson.id === 'certificate') {
+        isUnlocked = finalPassed;
+      } else {
+        isUnlocked = completed.includes(lessons[index - 1].id);
+      }
 
-    const isDone = completed.includes(lesson.id);
+      const isDone = completed.includes(lesson.id);
 
-    const item = document.createElement('div');
-    item.className = 'bg-white p-4 rounded shadow flex justify-between items-center';
+      const item = document.createElement('div');
+      item.className = 'bg-white p-4 rounded shadow flex justify-between items-center';
 
-    item.innerHTML = `
-      <div>
-        <h2 class="text-xl font-semibold">${lesson.title}</h2>
-        ${lesson.id === 'quiz1to4' && score !== null ? `<p class="text-sm text-gray-600">📊 Previous Score: ${score}%</p>` : ''}
-        ${lesson.id.startsWith('lesson') ? `
-          <p class="text-sm ${assignments.includes(lesson.id) ? 'text-green-600' : 'text-red-500'}">
-            ${assignments.includes(lesson.id) ? '📝 Assignment complete' : '📝 Assignment not done yet'}
-          </p>` : ''}
-      </div>
-      <div>
-        <a href="${isUnlocked ? lesson.url : '#'}" class="px-4 py-2 rounded text-white ${
-          isUnlocked
-            ? isDone
-              ? 'bg-green-600'
-              : 'bg-blue-600 hover:bg-blue-700'
-            : 'bg-gray-400 cursor-not-allowed'
-        }">
-          ${
+      item.innerHTML = `
+        <div>
+          <h2 class="text-xl font-semibold">${lesson.title}</h2>
+          ${lesson.id === 'quiz1to4' && score !== null ? `<p class="text-sm text-gray-600">📊 Previous Score: ${score}%</p>` : ''}
+          ${lesson.id === 'finalQuiz' && finalScore !== null ? `<p class="text-sm text-gray-600">📊 Final Score: ${finalScore}%</p>` : ''}
+          ${lesson.id.startsWith('lesson') ? `
+            <p class="text-sm ${assignments.includes(lesson.id) ? 'text-green-600' : 'text-red-500'}">
+              ${assignments.includes(lesson.id) ? '📝 Assignment complete' : '📝 Assignment not done yet'}
+            </p>` : ''}
+        </div>
+        <div>
+          <a href="${isUnlocked ? lesson.url : '#'}" class="px-4 py-2 rounded text-white ${
             isUnlocked
               ? isDone
-                ? '✅ Completed'
-                : 'Start'
-              : '🔒 Locked'
-          }
-        </a>
-      </div>
-    `;
+                ? 'bg-green-600'
+                : 'bg-blue-600 hover:bg-blue-700'
+              : 'bg-gray-400 cursor-not-allowed'
+          }">
+            ${
+              isUnlocked
+                ? isDone
+                  ? '✅ Completed'
+                  : 'Start'
+                : '🔒 Locked'
+            }
+          </a>
+        </div>
+      `;
 
-    list.appendChild(item);
-  });
-</script>
+      list.appendChild(item);
+    });
+  </script>
+
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
-      <strong>Disclaimer:</strong><br>
-      Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes. Pyforus does not claim ownership of any video content provided by Khan Academy and does not monetize, alter, or redistribute their material in any form.<br><br>
-      Khan Academy is a nonprofit organization that offers free educational resources to learners worldwide. All rights to the embedded videos, trademarks, and related content remain the exclusive property of Khan Academy. We strongly encourage users to visit and support Khan Academy directly at <a href="https://www.khanacademy.org" class="underline text-blue-600">www.khanacademy.org</a>.
-      <br />
-      <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="text-blue-600 underline" target="_blank">
-        📄 View Site License
-      </a>
-
+    <strong>Disclaimer:</strong><br>
+    Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes. Pyforus does not claim ownership of any video content provided by Khan Academy and does not monetize, alter, or redistribute their material in any form.<br><br>
+    Khan Academy is a nonprofit organization that offers free educational resources to learners worldwide. All rights to the embedded videos, trademarks, and related content remain the exclusive property of Khan Academy. We strongly encourage users to visit and support Khan Academy directly at 
+    <a href="https://www.khanacademy.org" class="underline text-blue-600">www.khanacademy.org</a>.
+    <br />
+    <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="text-blue-600 underline" target="_blank">
+      📄 View Site License
+    </a>
   </footer>
 </body>
 </html>
+
