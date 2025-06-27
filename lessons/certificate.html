@@ -36,17 +36,16 @@
   <script>
     const name = localStorage.getItem('studentName') || 'Anonymous Learner';
     const score = localStorage.getItem('finalScore') || '0';
-    const certId = localStorage.getItem('certificateId') || generateCertId();
+    let certId = localStorage.getItem('certificateId');
+
+    if (!certId) {
+      certId = 'PYF-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+      localStorage.setItem('certificateId', certId);
+    }
 
     document.getElementById('studentName').innerText = name;
     document.getElementById('finalScore').innerText = score + '%';
     document.getElementById('certId').innerText = certId;
-
-    function generateCertId() {
-      const id = 'PYF-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-      localStorage.setItem('certificateId', id);
-      return id;
-    }
 
     function downloadPDF() {
       const { jsPDF } = window.jspdf;
@@ -58,8 +57,6 @@
       });
     }
   </script>
-
-  <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
 
   <footer class="text-center text-xs text-gray-500 mt-10 border-t pt-4">
     This certificate is issued by Pyforus for educational purposes and represents the successful completion of a beginner Python programming course.
