@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Final Quiz – Pyforus</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .hidden { display: none; }
+  </style>
+</head>
+<body class="bg-white text-gray-900 p-6 max-w-4xl mx-auto">
+
+  <h1 class="text-3xl font-bold mb-4">🧪 Final Quiz – Python Mastery</h1>
+  <p class="mb-6">You have 1 hour to complete 20 questions. A score of 60% or higher is required to unlock your certificate.</p>
+
+  <div id="timer" class="text-lg font-semibold mb-6">⏳ Time left: 60:00</div>
+
+  <form id="quizForm" class="space-y-6">
+    <!-- Questions will be dynamically inserted here -->
+  </form>
+
+  <button id="submitBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">
+    📤 Submit Answers
+  </button>
+
+  <div id="result" class="mt-6 text-lg font-semibold hidden"></div>
+
+  <div id="certificateLink" class="mt-4 hidden">
+    <a href="certificate.html" class="text-green-600 underline">🎉 View Your Certificate</a>
+  </div>
+
+  <button id="retryBtn" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 mt-4 hidden">
+    🔁 Try Again
+  </button>
+
+  <script>
+    const questions = [
+      {
+        q: "Which keyword is used to define a function in Python?",
+        options: ["func", "define", "def", "function"],
+        answer: 2
+      },
+      {
+        q: "What does the 'input()' function return?",
+        options: ["Boolean", "String", "Integer", "Float"],
+        answer: 1
+      },
+      {
+        q: "What will 'print(3 ** 2)' output?",
+        options: ["6", "9", "8", "Error"],
+        answer: 1
+      },
+      {
+        q: "Which loop is best for iterating over a known range?",
+        options: ["while", "for", "loop", "repeat"],
+        answer: 1
+      },
+      {
+        q: "What is the result of 'not True or False'?",
+        options: ["True", "False", "None", "Error"],
+        answer: 1
+      },
+      {
+        q: "Which statement adds a new item to a list?",
+        options: ["list.add(item)", "list.append(item)", "list.insert(item)", "list.put(item)"],
+        answer: 1
+      },
+      {
+        q: "Which character starts a comment in Python?",
+        options: ["//", "--", "#", "/*"],
+        answer: 2
+      },
+      {
+        q: "What does 'elif' mean in Python?",
+        options: ["Else if", "Else loop", "Error", "End if"],
+        answer: 0
+      },
+      {
+        q: "Which function draws a line forward in turtle?",
+        options: ["move()", "draw()", "forward()", "line()"],
+        answer: 2
+      },
+      {
+        q: "Which data type is used to store key-value pairs?",
+        options: ["list", "set", "tuple", "dictionary"],
+        answer: 3
+      },
+      {
+        q: "What does 'range(3)' produce?",
+        options: ["1 2 3", "0 1 2", "0 1 2 3", "3 2 1"],
+        answer: 1
+      },
+      {
+        q: "How do you check if a key exists in a dictionary?",
+        options: ["key in dict", "dict.hasKey(key)", "key.exists(dict)", "find(dict, key)"],
+        answer: 0
+      },
+      {
+        q: "What does 'break' do in a loop?",
+        options: ["Pauses loop", "Skips next iteration", "Ends the loop", "Repeats"],
+        answer: 2
+      },
+      {
+        q: "Which of these is a valid list declaration?",
+        options: ["list = (1,2,3)", "list = [1,2,3]", "list = {1,2,3}", "list = <1,2,3>"],
+        answer: 1
+      },
+      {
+        q: "Which code correctly checks if a number is even?",
+        options: ["num % 2 == 0", "num // 2 == 0", "num * 2 == 0", "num + 2 == 0"],
+        answer: 0
+      },
+      {
+        q: "How do you access the last item in a list called 'data'?",
+        options: ["data[-1]", "data[1]", "data[last]", "data.end()"],
+        answer: 0
+      },
+      {
+        q: "Which method removes the last item from a list?",
+        options: ["remove()", "delete()", "pop()", "cut()"],
+        answer: 2
+      },
+      {
+        q: "What does 'len(\"hello\")' return?",
+        options: ["5", "4", "6", "Error"],
+        answer: 0
+      },
+      {
+        q: "What is the result of 'int(3.8)'?",
+        options: ["4", "3.8", "3", "Error"],
+        answer: 2
+      },
+      {
+        q: "What does 'turtle.circle(50)' do?",
+        options: ["Draws a square", "Draws a dot", "Draws a 50-pixel line", "Draws a circle"],
+        answer: 3
+      }
+    ];
+
+    function renderQuiz() {
+      const form = document.getElementById('quizForm');
+      form.innerHTML = '';
+      questions.forEach((q, i) => {
+        const block = document.createElement('div');
+        block.innerHTML = `
+          <div>
+            <p class="font-semibold mb-2">${i + 1}. ${q.q}</p>
+            ${q.options.map((opt, j) => `
+              <label class="block mb-1">
+                <input type="radio" name="q${i}" value="${j}" class="mr-2">
+                ${opt}
+              </label>
+            `).join('')}
+          </div>
+        `;
+        form.appendChild(block);
+      });
+    }
+
+    function evaluateQuiz() {
+      const form = document.getElementById('quizForm');
+      let score = 0;
+      questions.forEach((q, i) => {
+        const selected = form.querySelector(`input[name="q${i}"]:checked`);
+        if (selected && parseInt(selected.value) === q.answer) score++;
+      });
+      const percentage = Math.round((score / questions.length) * 100);
+      localStorage.setItem('finalQuizScore', percentage);
+
+      document.getElementById('result').textContent = `You scored ${percentage}%. ${percentage >= 60 ? '✅ You passed!' : '❌ You did not pass.'}`;
+      document.getElementById('result').classList.remove('hidden');
+      if (percentage >= 60) document.getElementById('certificateLink').classList.remove('hidden');
+      document.getElementById('retryBtn').classList.remove('hidden');
+      document.getElementById('submitBtn').disabled = true;
+    }
+
+    function startTimer(duration) {
+      let time = duration, minutes, seconds;
+      const display = document.getElementById('timer');
+      const interval = setInterval(() => {
+        minutes = Math.floor(time / 60);
+        seconds = time % 60;
+        display.textContent = `⏳ Time left: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        if (--time < 0) {
+          clearInterval(interval);
+          evaluateQuiz();
+        }
+      }, 1000);
+    }
+
+    document.getElementById('submitBtn').addEventListener('click', evaluateQuiz);
+    document.getElementById('retryBtn').addEventListener('click', () => location.reload());
+
+    renderQuiz();
+    startTimer(3600);
+  </script>
+
+  <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
+    Pyforus is a free educational site and does not monetize content. Quiz data is stored locally in your browser.
+  </footer>
+  <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="text-blue-600 underline" target="_blank">
+    📄 View Site License
+  </a>
+
+
+
+</body>
+</html>
