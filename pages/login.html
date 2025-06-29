@@ -3,25 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login | Pyforus</title>
+  <title>Login to Pyforus</title>
   <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-
-  <div class="bg-white p-8 rounded shadow-md max-w-sm w-full text-center">
-    <img src="assets/logo.png" alt="Pyforus Logo" class="mx-auto mb-4 w-20">
-    <h1 class="text-2xl font-bold mb-4">Sign in to Pyforus</h1>
-
-    <!-- 🔐 Google Sign-In Button -->
-    <button id="googleSignIn" class="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded mb-4">
-      🔐 Sign in with Google
-    </button>
-
-    <p class="text-sm text-gray-500">By continuing, you agree to our <a href="#" class="underline">terms</a>.</p>
-  </div>
-
-  <!-- Firebase SDKs -->
   <script type="module">
+    // Firebase imports
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
 
@@ -38,24 +23,38 @@
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    document.getElementById('googleSignIn').addEventListener('click', () => {
+    // Sign in function
+    window.loginWithGoogle = () => {
       signInWithPopup(auth, provider)
         .then((result) => {
-          const name = result.user.displayName || 'Anonymous Learner';
-          localStorage.setItem('studentName', name);
-          window.location.href = 'dashboard.html';
+          // Save name to localStorage
+          const user = result.user;
+          localStorage.setItem('studentName', user.displayName);
+          window.location.href = "dashboard.html";
         })
         .catch((error) => {
-          alert("❌ Login failed: " + error.message);
+          console.error("Login error:", error);
+          alert("Login failed. Please try again.");
         });
-    });
+    };
 
-    // Already signed in? Go straight to dashboard
+    // If already logged in, redirect
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        // Already logged in, skip login page
         window.location.href = 'dashboard.html';
       }
     });
+
   </script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-8 rounded shadow text-center max-w-md">
+    <h1 class="text-2xl font-bold mb-4">Welcome to Pyforus</h1>
+    <p class="mb-6 text-gray-600">Sign in to access your progress and certificate</p>
+    <button onclick="loginWithGoogle()" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded">
+      🔐 Sign in with Google
+    </button>
+  </div>
 </body>
 </html>

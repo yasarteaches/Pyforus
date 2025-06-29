@@ -5,21 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pyforus Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 text-gray-800 min-h-screen font-sans">
 
-  <div class="max-w-3xl mx-auto p-6 relative">
-    <h1 class="text-4xl font-bold mb-6">📘 Your Python Progress</h1>
-
-    <!-- 🔒 Logout Button -->
-    <button onclick="logout()" class="absolute top-6 right-6 bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700">
-      🔓 Logout
-    </button>
-
-    <div id="lessonList" class="space-y-4"></div>
-  </div>
-
-  <!-- Firebase Authentication Logic -->
+  <!-- Firebase & Auth Setup -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
@@ -38,18 +25,42 @@
 
     onAuthStateChanged(auth, (user) => {
       if (!user) {
-        window.location.href = "login.html"; // 🔁 Redirect if not logged in
+        window.location.href = "login.html";
+      } else {
+        const name = user.displayName || "Pyforus Learner";
+        document.getElementById("userName").textContent = name;
+        document.getElementById("logoutBtn").classList.remove("hidden");
+
+        // Store name in localStorage for certificate
+        localStorage.setItem('studentName', name);
       }
     });
 
-    window.logout = function () {
+    window.logout = () => {
       signOut(auth).then(() => {
-        localStorage.clear(); // Optional: clear lesson progress
+        localStorage.clear(); // Optional: wipe local progress too
         window.location.href = "login.html";
       });
     };
+  </script>
+</head>
 
-    // Continue with lesson rendering (same logic you had)
+<body class="bg-gray-100 text-gray-800 min-h-screen font-sans">
+  <div class="max-w-3xl mx-auto p-6">
+    <div class="flex justify-between items-center mb-6">
+      <div>
+        <h1 class="text-4xl font-bold">📘 Your Python Progress</h1>
+        <p class="text-sm text-gray-600 mt-1">Logged in as <span id="userName">...</span></p>
+      </div>
+      <button id="logoutBtn" onclick="logout()" class="hidden bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+        🚪 Logout
+      </button>
+    </div>
+
+    <div id="lessonList" class="space-y-4"></div>
+  </div>
+
+  <script>
     const lessons = [
       { id: 'lesson1', title: 'Lesson 1: Introduction to Python', url: 'lessons/lesson1.html' },
       { id: 'lesson2', title: 'Lesson 2: Control Flow (if/else)', url: 'lessons/lesson2.html' },
@@ -65,10 +76,8 @@
 
     const completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
     const assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
-
     const quiz1to4Score = localStorage.getItem('quiz1to4Score');
     const score = quiz1to4Score !== null ? parseInt(quiz1to4Score) : null;
-
     const finalScore = localStorage.getItem('finalScore');
     const finalPassed = finalScore !== null && parseInt(finalScore) >= 60;
 
@@ -127,13 +136,9 @@
 
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
     <strong>Disclaimer:</strong><br>
-    Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes. Pyforus does not claim ownership of any video content provided by Khan Academy and does not monetize, alter, or redistribute their material in any form.<br><br>
-    Khan Academy is a nonprofit organization that offers free educational resources to learners worldwide. All rights to the embedded videos, trademarks, and related content remain the exclusive property of Khan Academy. We strongly encourage users to visit and support Khan Academy directly at 
-    <a href="https://www.khanacademy.org" class="underline text-blue-600">www.khanacademy.org</a>.
-    <br />
-    <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="text-blue-600 underline" target="_blank">
-      📄 View Site License
-    </a>
+    Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes.<br><br>
+    Khan Academy is a nonprofit offering free educational resources. All rights to the videos remain theirs. Visit <a href="https://www.khanacademy.org" class="underline text-blue-600">www.khanacademy.org</a>.<br />
+    <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="text-blue-600 underline" target="_blank">📄 View Site License</a>
   </footer>
 </body>
 </html>
