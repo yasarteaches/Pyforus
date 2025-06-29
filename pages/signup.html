@@ -1,0 +1,46 @@
+<!-- signup.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up – Pyforus</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
+      authDomain: "pyforus-4289e.firebaseapp.com",
+      projectId: "pyforus-4289e",
+      storageBucket: "pyforus-4289e.firebasestorage.app",
+      messagingSenderId: "798083294290",
+      appId: "1:798083294290:web:c19d4c169c451410062b8b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    document.getElementById("signupBtn").addEventListener("click", () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          alert("🎉 Account created! Redirecting to dashboard...");
+          window.location.href = "dashboard.html";
+        })
+        .catch((error) => alert(error.message));
+    });
+  </script>
+</head>
+<body class="bg-gray-100 p-6">
+  <div class="max-w-md mx-auto bg-white p-6 rounded shadow">
+    <h1 class="text-2xl font-bold mb-4">🔐 Sign Up</h1>
+    <input id="email" type="email" placeholder="Email" class="w-full border p-2 mb-3 rounded">
+    <input id="password" type="password" placeholder="Password" class="w-full border p-2 mb-4 rounded">
+    <button id="signupBtn" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Create Account</button>
+    <p class="text-sm mt-4">Already have an account? <a href="login.html" class="text-blue-600 underline">Log in</a></p>
+  </div>
+</body>
+</html>
