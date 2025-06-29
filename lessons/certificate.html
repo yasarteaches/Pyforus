@@ -8,53 +8,25 @@
   <style>
     .certificate-wrapper {
       background: url('../assets/certificate-bg.png') no-repeat center center;
-      background-size: contain; /* 🔧 was 'cover', now 'contain' */
+      background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
       width: 100%;
       height: auto;
-      aspect-ratio: 16 / 11; /* 📏 optional but helps with certificate proportions */
+      aspect-ratio: 16 / 11;
       position: relative;
     }
-
-    .overlay {
-      background-color: rgba(255, 255, 255, 0.85);
-      height: 100%;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      text-align: center;
-      padding: 2rem;
-    }
   </style>
-
-
 </head>
 <body class="bg-white text-gray-900 p-4">
 
-  <div id="certificate" class="certificate-wrapper max-w-4xl mx-auto shadow-lg rounded-xl overflow-hidden">
-    <div class="overlay h-full flex flex-col justify-center items-center text-center p-8">
-      <img src="../assets/logo.png" alt="Pyforus Logo" class="w-20 mb-4">
-      <h1 class="text-2xl font-bold uppercase tracking-wide mb-2">Certificate of Completion</h1>
-      <p class="text-gray-600">This certifies that</p>
-      <h2 id="studentName" class="text-2xl font-semibold mt-2">[Student Name]</h2>
-      <p class="text-gray-700 mt-2">
-        has successfully completed the <strong>Pyforus Python Programming Course</strong>
-      </p>
-      <p class="text-sm text-gray-600 mt-2 max-w-xl">
-        This course covered: Python basics, control flow, loops, functions, drawing with Turtle, lists, dictionaries, and culminated in a final quiz.
-      </p>
-      <p class="text-md text-gray-800 mt-4">Final Quiz Score: <span id="finalScore">0%</span></p>
-      <p class="text-md text-gray-800">Certificate ID: <span id="certId">#XXXXXX</span></p>
+  <div id="certificate" class="certificate-wrapper max-w-4xl mx-auto shadow-lg rounded-xl overflow-hidden border border-gray-300"></div>
 
-      <div class="mt-6">
-        <button onclick="downloadPDF()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          📥 Download PDF
-        </button>
-        <a href="../dashboard.html" class="block mt-3 text-blue-600 underline">← Back to Dashboard</a>
-      </div>
-    </div>
+  <div class="text-center mt-6">
+    <button onclick="downloadPDF()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      📥 Download PDF
+    </button>
+    <a href="../dashboard.html" class="block mt-2 text-blue-600 underline">← Back to Dashboard</a>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -64,15 +36,31 @@
     const score = localStorage.getItem('finalScore') || '0';
     const certId = localStorage.getItem('certificateId') || generateCertId();
 
-    document.getElementById('studentName').innerText = name;
-    document.getElementById('finalScore').innerText = score + '%';
-    document.getElementById('certId').innerText = certId;
-
     function generateCertId() {
       const id = 'PYF-' + Math.random().toString(36).substr(2, 9).toUpperCase();
       localStorage.setItem('certificateId', id);
       return id;
     }
+
+    // Inject name, score, and ID on top of the background image
+    window.onload = () => {
+      const container = document.getElementById("certificate");
+
+      const overlay = document.createElement("div");
+      overlay.className = "absolute inset-0 flex flex-col justify-center text-center px-8 bg-white bg-opacity-0";
+
+      overlay.innerHTML = `
+        <div class="mt-28">
+          <h2 class="text-xl sm:text-2xl font-semibold text-gray-800">${name}</h2>
+          <p class="text-sm sm:text-base text-gray-700 mt-2">has successfully completed the <strong>Pyforus Python Programming Course</strong></p>
+          <p class="text-xs sm:text-sm text-gray-600 mt-2">Topics covered: Python basics, control flow, loops, functions, turtle graphics, lists, dictionaries, and a final quiz.</p>
+          <p class="text-sm text-gray-800 mt-4">Final Quiz Score: ${score}%</p>
+          <p class="text-sm text-gray-800">Certificate ID: ${certId}</p>
+        </div>
+      `;
+
+      container.appendChild(overlay);
+    };
 
     function downloadPDF() {
       const { jsPDF } = window.jspdf;
@@ -94,6 +82,5 @@
     <a href="https://github.com/yasarteaches/Pyforus" class="underline text-blue-600">GitHub Repository</a> |
     <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="underline text-blue-600" target="_blank">📄 View License</a>
   </footer>
-
 </body>
 </html>
