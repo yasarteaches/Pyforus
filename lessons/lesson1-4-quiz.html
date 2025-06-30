@@ -5,6 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Review Quiz – Lessons 1–4</title>
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
+      authDomain: "pyforus-4289e.firebaseapp.com",
+      projectId: "pyforus-4289e",
+      storageBucket: "pyforus-4289e.appspot.com",
+      messagingSenderId: "798083294290",
+      appId: "1:798083294290:web:c19d4c169c451410062b8b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "../login.html"; // or just "login.html" depending on the file location
+      }
+    });
+  </script>
+
 </head>
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
 
