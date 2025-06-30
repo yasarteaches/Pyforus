@@ -9,6 +9,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { getFirestore, doc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
@@ -21,14 +22,38 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        window.location.href = "../login.html"; // or just "login.html" depending on the file location
+        window.location.href = "../login.html";
+      } else {
+        window.userEmail = user.email;
       }
     });
-  </script>
 
+    window.markLessonComplete = async () => {
+      const lessonId = 'lesson5';
+      let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
+      if (!completed.includes(lessonId)) {
+        completed.push(lessonId);
+        localStorage.setItem('completedLessons', JSON.stringify(completed));
+      }
+      let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
+      if (!assignments.includes(lessonId)) {
+        assignments.push(lessonId);
+        localStorage.setItem('completedAssignments', JSON.stringify(assignments));
+      }
+      if (window.userEmail) {
+        const userRef = doc(db, 'users', window.userEmail);
+        await updateDoc(userRef, {
+          completedLessons: arrayUnion(lessonId),
+          completedAssignments: arrayUnion(lessonId)
+        });
+      }
+      alert('Lesson 5 marked as complete! ✅');
+    }
+  </script>
 </head>
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
 
@@ -92,52 +117,12 @@ window.mainloop()</code></pre>
     </ul>
   </div>
 
-  <!-- Mark Complete -->
   <button onclick="markLessonComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
     ✅ Mark Lesson as Complete
   </button>
 
-  <!-- Mark Assignment Complete Button -->
-  <button id="markAssignmentBtn" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
-    📝 Mark Assignment as Complete
-  </button>
-
-  <!-- Scripts -->
-  <script>
-    function markLessonComplete() {
-      let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
-      if (!completed.includes('lesson5')) {
-        completed.push('lesson5');
-        localStorage.setItem('completedLessons', JSON.stringify(completed));
-      }
-
-      let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
-      if (!assignments.includes('lesson5')) {
-        assignments.push('lesson5');
-        localStorage.setItem('completedAssignments', JSON.stringify(assignments));
-      }
-
-      alert('Lesson 5 marked as complete! ✅');
-    }
-
-    document.getElementById("markAssignmentBtn").addEventListener("click", () => {
-      let assignments = JSON.parse(localStorage.getItem("completedAssignments")) || [];
-      const lessonId = window.location.pathname.split("/").pop().split(".")[0];
-
-      if (!assignments.includes(lessonId)) {
-        assignments.push(lessonId);
-        localStorage.setItem("completedAssignments", JSON.stringify(assignments));
-        alert("Assignment marked as complete! ✅");
-      } else {
-        alert("You already completed this assignment.");
-      }
-    });
-  </script>
-
-  <!-- Back to Dashboard -->
   <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
 
-  <!-- Footer -->
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
     <strong>Disclaimer:</strong><br>
     Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes. Pyforus does not claim ownership of any video content provided by Khan Academy and does not monetize, alter, or redistribute their material in any form.<br><br>
@@ -146,7 +131,6 @@ window.mainloop()</code></pre>
    <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="text-blue-600 underline" target="_blank">
       📄 View Site License
    </a>
-
   </footer>
 
 </body>

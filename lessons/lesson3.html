@@ -5,30 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lesson 3: Loops (for & while)</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
-      authDomain: "pyforus-4289e.firebaseapp.com",
-      projectId: "pyforus-4289e",
-      storageBucket: "pyforus-4289e.appspot.com",
-      messagingSenderId: "798083294290",
-      appId: "1:798083294290:web:c19d4c169c451410062b8b"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "../login.html"; // or just "login.html" depending on the file location
-      }
-    });
-  </script>
-
 </head>
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
 
@@ -45,7 +21,6 @@
     </iframe>
   </div>
 
-
   <!-- Objectives -->
   <div class="mb-6">
     <h2 class="text-xl font-semibold mb-2">🎯 Learning Objectives</h2>
@@ -59,12 +34,10 @@
   <!-- Code Examples -->
   <div class="mb-6">
     <h2 class="text-xl font-semibold mb-2">💻 Code Examples</h2>
-    <p class="mb-2">Here is a simple <code>for</code> loop:</p>
     <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code>for i in range(5):
     print(i)</code></pre>
 
-    <p class="mt-4 mb-2">And a basic <code>while</code> loop:</p>
-    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code>count = 0
+    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto mt-4"><code>count = 0
 while count < 5:
     print(count)
     count += 1</code></pre>
@@ -76,9 +49,7 @@ while count < 5:
     <p class="mb-2">Create a program that asks the user to enter a number and then prints all numbers from 1 to that number using a <code>for</code> loop.</p>
     <p class="mb-2">Then add another part that uses a <code>while</code> loop to count down from that number to 1.</p>
 
-    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code># Your code here:
-
-# FOR LOOP
+    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code># FOR LOOP
 num = int(input("Enter a number: "))
 for i in range(1, num + 1):
     print(i)
@@ -95,60 +66,92 @@ while count > 0:
     ✅ Mark as Complete
   </button>
 
-  
-
-  <!-- Completion Script -->
-  <script>
-    function markLessonComplete() {
-      let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
-      if (!completed.includes('lesson3')) {
-        completed.push('lesson3');
-        localStorage.setItem('completedLessons', JSON.stringify(completed));
-      }   
-
-      let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
-      if (!assignments.includes('lesson3')) {
-        assignments.push('lesson3');
-        localStorage.setItem('completedAssignments', JSON.stringify(assignments));
-      }
-
-      alert('Lesson 3 marked as complete! ✅');
-    }
-  </script>
-
   <!-- Mark Assignment Complete Button -->
   <button id="markAssignmentBtn" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
     📝 Mark Assignment as Complete
   </button>
 
-  <script>
-    document.getElementById("markAssignmentBtn").addEventListener("click", () => {
-      let assignments = JSON.parse(localStorage.getItem("completedAssignments")) || [];
-      const lessonId = window.location.pathname.split("/").pop().split(".")[0]; // e.g., lesson1
+  <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
 
-      if (!assignments.includes(lessonId)) {
-        assignments.push(lessonId);
-        localStorage.setItem("completedAssignments", JSON.stringify(assignments));
-        alert("Assignment marked as complete! ✅");
+  <!-- Firebase Logic for Protection + Firestore Sync -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
+      authDomain: "pyforus-4289e.firebaseapp.com",
+      projectId: "pyforus-4289e",
+      storageBucket: "pyforus-4289e.appspot.com",
+      messagingSenderId: "798083294290",
+      appId: "1:798083294290:web:c19d4c169c451410062b8b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "../login.html";
       } else {
-        alert("You already completed this assignment.");
+        const uid = user.uid;
+
+        // Mark Lesson Completion
+        document.getElementById("markCompleteBtn").addEventListener("click", async () => {
+          const userRef = doc(db, "userProgress", uid);
+          const snap = await getDoc(userRef);
+          const data = snap.exists() ? snap.data() : {};
+
+          const updatedLessons = Array.isArray(data.completedLessons) ? data.completedLessons : [];
+          if (!updatedLessons.includes("lesson3")) {
+            updatedLessons.push("lesson3");
+          }
+
+          const updatedAssignments = Array.isArray(data.completedAssignments) ? data.completedAssignments : [];
+          if (!updatedAssignments.includes("lesson3")) {
+            updatedAssignments.push("lesson3");
+          }
+
+          await setDoc(userRef, {
+            completedLessons: updatedLessons,
+            completedAssignments: updatedAssignments
+          }, { merge: true });
+
+          alert("Lesson 3 marked as complete! ✅");
+        });
+
+        // Mark Assignment Complete
+        document.getElementById("markAssignmentBtn").addEventListener("click", async () => {
+          const userRef = doc(db, "userProgress", uid);
+          const snap = await getDoc(userRef);
+          const data = snap.exists() ? snap.data() : {};
+
+          const updatedAssignments = Array.isArray(data.completedAssignments) ? data.completedAssignments : [];
+          if (!updatedAssignments.includes("lesson3")) {
+            updatedAssignments.push("lesson3");
+            await setDoc(userRef, {
+              completedAssignments: updatedAssignments
+            }, { merge: true });
+
+            alert("Assignment marked as complete! ✅");
+          } else {
+            alert("You already completed this assignment.");
+          }
+        });
       }
     });
   </script>
 
-    <!-- FIXED: Proper back link -->
-  <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
-
-
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
     <strong>Disclaimer:</strong><br>
-    Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes. Pyforus does not claim ownership of any video content provided by Khan Academy and does not monetize, alter, or redistribute their material in any form.<br><br>
-    Khan Academy is a nonprofit organization that offers free educational resources to learners worldwide. All rights to the embedded videos, trademarks, and related content remain the exclusive property of Khan Academy. We strongly encourage users to visit and support Khan Academy directly at <a href="https://www.khanacademy.org" class="underline text-blue-600">www.khanacademy.org</a>.
+    Pyforus is an educational platform using Khan Academy videos for educational purposes only.<br />
+    Visit <a href="https://www.khanacademy.org" class="underline text-blue-600">www.khanacademy.org</a> to support them.
     <br />
     <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="text-blue-600 underline" target="_blank">
       📄 View Site License
     </a>
-
   </footer>
 
 </body>

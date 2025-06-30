@@ -5,10 +5,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lesson 4: Functions</title>
   <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
+
+  <h1 class="text-3xl font-bold mb-4">🔧 Lesson 4: Functions</h1>
+
+  <div class="relative pt-[56.25%] mb-6">
+    <iframe class="absolute top-0 left-0 w-full h-full rounded-xl"
+      src="https://www.youtube.com/embed/UmNKiV7Lekk"
+      title="Functions – Khan Academy"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">🌟 Learning Objectives</h2>
+    <ul class="list-disc list-inside space-y-1 text-gray-800">
+      <li>Understand what functions are and why we use them</li>
+      <li>Learn how to define and call a function in Python</li>
+      <li>Explore parameters and return values</li>
+    </ul>
+  </div>
+
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">💻 Code Examples</h2>
+    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code># Defining a function
+def greet():
+    print("Hello, welcome!")
+
+greet()
+
+def greet_user(name):
+    print("Hello, " + name + "!")
+
+greet_user("Mira")
+
+def add(a, b):
+    return a + b
+
+result = add(3, 4)
+print(result)</code></pre>
+  </div>
+
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold mb-2">📝 Your Assignment</h2>
+    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code>def square(n):
+    return n * n
+
+print(square(7))</code></pre>
+  </div>
+
+  <button id="markCompleteBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+    ✅ Mark as Complete
+  </button>
+
+  <button id="markAssignmentBtn" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
+    📝 Mark Assignment as Complete
+  </button>
+
+  <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
@@ -21,136 +81,64 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        window.location.href = "../login.html"; // or just "login.html" depending on the file location
-      }
-    });
-  </script>
-
-</head>
-<body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
-
-  <h1 class="text-3xl font-bold mb-4">🔧 Lesson 4: Functions</h1>
-
-  <!-- Functions Video -->
-  <div class="relative pt-[56.25%] mb-6">
-    <iframe class="absolute top-0 left-0 w-full h-full rounded-xl"
-      src="https://www.youtube.com/embed/UmNKiV7Lekk"
-      title="Functions – Khan Academy"
-      allowfullscreen>
-    </iframe>
-  </div>
-
-
-  <!-- Objectives -->
-  <div class="mb-6">
-    <h2 class="text-xl font-semibold mb-2">🎯 Learning Objectives</h2>
-    <ul class="list-disc list-inside space-y-1 text-gray-800">
-      <li>Understand what functions are and why we use them</li>
-      <li>Learn how to define and call a function in Python</li>
-      <li>Explore parameters and return values</li>
-    </ul>
-  </div>
-
-  <!-- Code Examples -->
-  <div class="mb-6">
-    <h2 class="text-xl font-semibold mb-2">💻 Code Examples</h2>
-    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code># Defining a function
-def greet():
-    print("Hello, welcome!")
-
-# Calling the function
-greet()
-
-# Function with parameter
-def greet_user(name):
-    print("Hello, " + name + "!")
-
-greet_user("Mira")
-
-# Function with return value
-def add(a, b):
-    return a + b
-
-result = add(3, 4)
-print(result)</code></pre>
-  </div>
-
-  <!-- Assignment -->
-  <div class="mb-6">
-    <h2 class="text-xl font-semibold mb-2">📝 Your Assignment</h2>
-    <p class="mb-2">Create a function named <code>square</code> that takes a number and returns its square. Then use it to print the square of 7.</p>
-    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code># Your turn!
-# Write the function and print the result of square(7)
-
-def square(n):
-    return n * n
-
-print(square(7))</code></pre>
-  </div>
-
-  <!-- Mark Complete Button -->
-  <button onclick="markComplete('lesson4')" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-    ✅ Mark as Complete
-  </button>
-
-  
-
-  <!-- Completion Script -->
-  <script>
-    function markLessonComplete() {
-      let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
-      if (!completed.includes('lesson4')) {
-        completed.push('lesson4');
-        localStorage.setItem('completedLessons', JSON.stringify(completed));
-      }   
-
-      let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
-      if (!assignments.includes('lesson4')) {
-        assignments.push('lesson4');
-        localStorage.setItem('completedAssignments', JSON.stringify(assignments));
-      }
-
-      alert('Lesson 4 marked as complete! ✅');
-    }
-  </script>
-
-  <!-- Mark Assignment Complete Button -->
-  <button id="markAssignmentBtn" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
-    📝 Mark Assignment as Complete
-  </button>
-
-  <script>
-    document.getElementById("markAssignmentBtn").addEventListener("click", () => {
-      let assignments = JSON.parse(localStorage.getItem("completedAssignments")) || [];
-      const lessonId = window.location.pathname.split("/").pop().split(".")[0]; // e.g., lesson1
-
-      if (!assignments.includes(lessonId)) {
-        assignments.push(lessonId);
-        localStorage.setItem("completedAssignments", JSON.stringify(assignments));
-        alert("Assignment marked as complete! ✅");
+        window.location.href = "../login.html";
       } else {
-        alert("You already completed this assignment.");
+        const uid = user.uid;
+        const userRef = doc(db, "userProgress", uid);
+
+        document.getElementById("markCompleteBtn").addEventListener("click", async () => {
+          const snap = await getDoc(userRef);
+          const data = snap.exists() ? snap.data() : {};
+
+          const updatedLessons = Array.isArray(data.completedLessons) ? data.completedLessons : [];
+          if (!updatedLessons.includes("lesson4")) {
+            updatedLessons.push("lesson4");
+          }
+
+          const updatedAssignments = Array.isArray(data.completedAssignments) ? data.completedAssignments : [];
+          if (!updatedAssignments.includes("lesson4")) {
+            updatedAssignments.push("lesson4");
+          }
+
+          await setDoc(userRef, {
+            completedLessons: updatedLessons,
+            completedAssignments: updatedAssignments
+          }, { merge: true });
+
+          alert("Lesson 4 marked as complete! ✅");
+        });
+
+        document.getElementById("markAssignmentBtn").addEventListener("click", async () => {
+          const snap = await getDoc(userRef);
+          const data = snap.exists() ? snap.data() : {};
+          const updatedAssignments = Array.isArray(data.completedAssignments) ? data.completedAssignments : [];
+
+          if (!updatedAssignments.includes("lesson4")) {
+            updatedAssignments.push("lesson4");
+            await setDoc(userRef, {
+              completedAssignments: updatedAssignments
+            }, { merge: true });
+            alert("Assignment marked as complete! ✅");
+          } else {
+            alert("You already completed this assignment.");
+          }
+        });
       }
     });
   </script>
-
-    <!-- FIXED: Proper back link -->
-  <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
-
-
 
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
     <strong>Disclaimer:</strong><br>
-    Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes. Pyforus does not claim ownership of any video content provided by Khan Academy and does not monetize, alter, or redistribute their material in any form.<br><br>
-    Khan Academy is a nonprofit organization that offers free educational resources to learners worldwide. All rights to the embedded videos, trademarks, and related content remain the exclusive property of Khan Academy. We strongly encourage users to visit and support Khan Academy directly at <a href="https://www.khanacademy.org" class="underline text-blue-600">www.khanacademy.org</a>.
+    Pyforus is an educational platform using Khan Academy videos for educational purposes only.<br />
+    Visit <a href="https://www.khanacademy.org" class="underline text-blue-600">www.khanacademy.org</a> to support them.
     <br />
     <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="text-blue-600 underline" target="_blank">
       📄 View Site License
     </a>
-
   </footer>
 
 </body>

@@ -9,6 +9,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
@@ -21,12 +22,53 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        window.location.href = "../login.html"; // or just "login.html" depending on the file location
+        window.location.href = "../login.html";
+      } else {
+        window.currentUser = user;
       }
     });
+
+    window.markLessonComplete = async function () {
+      const user = window.currentUser;
+      if (!user) return;
+
+      const userDocRef = doc(db, "progress", user.uid);
+      const userDoc = await getDoc(userDocRef);
+
+      let data = userDoc.exists() ? userDoc.data() : {};
+      data.completedLessons = data.completedLessons || [];
+      data.completedAssignments = data.completedAssignments || [];
+
+      if (!data.completedLessons.includes("lesson7")) data.completedLessons.push("lesson7");
+      if (!data.completedAssignments.includes("lesson7")) data.completedAssignments.push("lesson7");
+
+      await setDoc(userDocRef, data);
+      alert("Lesson 7 marked as complete! ✅");
+    };
+
+    window.markAssignmentComplete = async function () {
+      const user = window.currentUser;
+      if (!user) return;
+
+      const lessonId = "lesson7";
+      const userDocRef = doc(db, "progress", user.uid);
+      const userDoc = await getDoc(userDocRef);
+
+      let data = userDoc.exists() ? userDoc.data() : {};
+      data.completedAssignments = data.completedAssignments || [];
+
+      if (!data.completedAssignments.includes(lessonId)) {
+        data.completedAssignments.push(lessonId);
+        await setDoc(userDocRef, data);
+        alert("Assignment marked as complete! ✅");
+      } else {
+        alert("You already completed this assignment.");
+      }
+    };
   </script>
 
 </head>
@@ -36,15 +78,13 @@
   <p class="mb-6 text-gray-700">Dictionaries in Python allow you to store data using key-value pairs. They're very useful for organizing data that has labels.</p>
 
   <!-- Dictionaries Video -->
-    <div class="relative pt-[56.25%] mb-6">
-     <iframe class="absolute top-0 left-0 w-full h-full rounded-xl"
-        src="https://www.youtube.com/embed/nf26Yv5JTOc"
-        title="Dictionaries – Khan Academy"
-        allowfullscreen>
-     </iframe>
-    </div>
-
-
+  <div class="relative pt-[56.25%] mb-6">
+    <iframe class="absolute top-0 left-0 w-full h-full rounded-xl"
+      src="https://www.youtube.com/embed/nf26Yv5JTOc"
+      title="Dictionaries – Khan Academy"
+      allowfullscreen>
+    </iframe>
+  </div>
 
   <div class="mb-6">
     <h2 class="text-xl font-semibold mb-2">📌 What You'll Learn</h2>
@@ -87,51 +127,15 @@ for key in student:
   <button onclick="markLessonComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
     ✅ Mark Lesson as Complete
   </button>
-  
 
-  <script>
-    function markLessonComplete() {
-      let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
-      if (!completed.includes('lesson7')) {
-        completed.push('lesson7');
-        localStorage.setItem('completedLessons', JSON.stringify(completed));
-      }
-
-      let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
-      if (!assignments.includes('lesson7')) {
-        assignments.push('lesson7');
-        localStorage.setItem('completedAssignments', JSON.stringify(assignments));
-      }
-
-      alert('Lesson 7 marked as complete! ✅');
-    }
-  </script>
-
-  <!-- Mark Assignment Complete Button -->
-  <button id="markAssignmentBtn" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
+  <button id="markAssignmentBtn" onclick="markAssignmentComplete()" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
     📝 Mark Assignment as Complete
   </button>
 
-  <script>
-    document.getElementById("markAssignmentBtn").addEventListener("click", () => {
-      let assignments = JSON.parse(localStorage.getItem("completedAssignments")) || [];
-      const lessonId = window.location.pathname.split("/").pop().split(".")[0]; // e.g., lesson1
-
-      if (!assignments.includes(lessonId)) {
-        assignments.push(lessonId);
-        localStorage.setItem("completedAssignments", JSON.stringify(assignments));
-        alert("Assignment marked as complete! ✅");
-      } else {
-        alert("You already completed this assignment.");
-      }
-    });
-  </script>
-
-    <!-- FIXED: Proper back link -->
+  <!-- Back to Dashboard -->
   <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
 
-
-
+  <!-- Footer -->
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
     <strong>Disclaimer:</strong><br>
     Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes. Pyforus does not claim ownership of any video content provided by Khan Academy and does not monetize, alter, or redistribute their material in any form.<br><br>
@@ -140,8 +144,7 @@ for key in student:
     <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="text-blue-600 underline" target="_blank">
       📄 View Site License
     </a>
-
   </footer>
-  
+
 </body>
 </html>

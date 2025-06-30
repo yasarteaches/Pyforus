@@ -10,7 +10,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
@@ -47,11 +47,6 @@
         assignments = data.completedAssignments || [];
         quiz1to4Score = data.quiz1to4Score;
         finalScore = data.finalScore;
-
-        localStorage.setItem('completedLessons', JSON.stringify(completed));
-        localStorage.setItem('completedAssignments', JSON.stringify(assignments));
-        if (quiz1to4Score) localStorage.setItem('quiz1to4Score', quiz1to4Score);
-        if (finalScore) localStorage.setItem('finalScore', finalScore);
       } else {
         await setDoc(userRef, {
           completedLessons: [],
@@ -60,6 +55,11 @@
           finalScore: null
         });
       }
+
+      localStorage.setItem('completedLessons', JSON.stringify(completed));
+      localStorage.setItem('completedAssignments', JSON.stringify(assignments));
+      if (quiz1to4Score) localStorage.setItem('quiz1to4Score', quiz1to4Score);
+      if (finalScore) localStorage.setItem('finalScore', finalScore);
     });
 
     window.logout = () => {
