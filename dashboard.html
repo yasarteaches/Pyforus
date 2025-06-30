@@ -6,10 +6,11 @@
   <title>pyforus Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Firebase & Auth Setup -->
+  <!-- Firebase, Auth, Firestore Setup -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
@@ -22,29 +23,53 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "login.html";
-      } else {
-        const name = user.displayName || "Pyforus Learner";
-        document.getElementById("userName").textContent = name;
-        document.getElementById("logoutBtn").classList.remove("hidden");
+        return;
+      }
 
-        // Store name in localStorage for certificate
-        localStorage.setItem('studentName', name);
+      const name = user.displayName || "Pyforus Learner";
+      document.getElementById("userName").textContent = name;
+      document.getElementById("logoutBtn").classList.remove("hidden");
+      localStorage.setItem("studentName", name);
+
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+
+      let completed = [], assignments = [], quiz1to4Score = null, finalScore = null;
+
+      if (userSnap.exists()) {
+        const data = userSnap.data();
+        completed = data.completedLessons || [];
+        assignments = data.completedAssignments || [];
+        quiz1to4Score = data.quiz1to4Score;
+        finalScore = data.finalScore;
+
+        localStorage.setItem('completedLessons', JSON.stringify(completed));
+        localStorage.setItem('completedAssignments', JSON.stringify(assignments));
+        if (quiz1to4Score) localStorage.setItem('quiz1to4Score', quiz1to4Score);
+        if (finalScore) localStorage.setItem('finalScore', finalScore);
+      } else {
+        await setDoc(userRef, {
+          completedLessons: [],
+          completedAssignments: [],
+          quiz1to4Score: null,
+          finalScore: null
+        });
       }
     });
 
     window.logout = () => {
       signOut(auth).then(() => {
-        localStorage.clear(); // Optional: wipe local progress too
+        localStorage.clear();
         window.location.href = "login.html";
       });
     };
   </script>
 </head>
-
 <body class="bg-gray-100 text-gray-800 min-h-screen font-sans">
   <div class="max-w-3xl mx-auto p-6">
     <div class="flex justify-between items-center mb-6">
