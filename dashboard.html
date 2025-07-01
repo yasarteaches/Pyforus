@@ -10,7 +10,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
@@ -60,6 +60,11 @@
       localStorage.setItem('completedAssignments', JSON.stringify(assignments));
       if (quiz1to4Score) localStorage.setItem('quiz1to4Score', quiz1to4Score);
       if (finalScore) localStorage.setItem('finalScore', finalScore);
+
+      const total = 10;
+      const percent = Math.round((completed.length / total) * 100);
+      document.getElementById("progressFill").style.width = `${percent}%`;
+      document.getElementById("progressText").textContent = `${percent}% complete`;
     });
 
     window.logout = () => {
@@ -81,6 +86,12 @@
         🚪 Logout
       </button>
     </div>
+
+    <!-- Progress Bar -->
+    <div class="w-full bg-gray-300 rounded-full h-4 mb-6">
+      <div id="progressFill" class="bg-blue-600 h-4 rounded-full" style="width: 0%"></div>
+    </div>
+    <p id="progressText" class="text-sm text-gray-700 mb-4">Loading progress...</p>
 
     <div id="lessonList" class="space-y-4"></div>
   </div>

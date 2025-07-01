@@ -6,9 +6,11 @@
   <title>Lesson 2 – Control Flow (if/else)</title>
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Firebase Integration -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
@@ -21,14 +23,72 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
+    let currentUser = null;
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        window.location.href = "../login.html"; // or just "login.html" depending on the file location
+        window.location.href = "../login.html";
+        return;
+      }
+      currentUser = user;
+
+      const ref = doc(db, "users", user.uid);
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        const data = snap.data();
+        localStorage.setItem("completedLessons", JSON.stringify(data.completedLessons || []));
+        localStorage.setItem("completedAssignments", JSON.stringify(data.completedAssignments || []));
+      } else {
+        await setDoc(ref, {
+          completedLessons: [],
+          completedAssignments: [],
+          quiz1to4Score: null,
+          finalScore: null
+        });
       }
     });
-  </script>
 
+    window.markLessonComplete = async function () {
+      if (!currentUser) return alert("You must be logged in.");
+      const uid = currentUser.uid;
+      const userRef = doc(db, "users", uid);
+
+      let completed = JSON.parse(localStorage.getItem("completedLessons")) || [];
+      if (!completed.includes("lesson2")) completed.push("lesson2");
+
+      let assignments = JSON.parse(localStorage.getItem("completedAssignments")) || [];
+
+      localStorage.setItem("completedLessons", JSON.stringify(completed));
+      localStorage.setItem("completedAssignments", JSON.stringify(assignments));
+
+      await updateDoc(userRef, {
+        completedLessons: completed,
+        completedAssignments: assignments
+      });
+
+      alert("Lesson 2 marked as complete! ✅");
+    };
+
+    window.markAssignmentComplete = async function () {
+      if (!currentUser) return alert("You must be logged in.");
+      const uid = currentUser.uid;
+      const userRef = doc(db, "users", uid);
+
+      let assignments = JSON.parse(localStorage.getItem("completedAssignments")) || [];
+      let completed = JSON.parse(localStorage.getItem("completedLessons")) || [];
+
+      if (!assignments.includes("lesson2")) assignments.push("lesson2");
+      localStorage.setItem("completedAssignments", JSON.stringify(assignments));
+
+      await updateDoc(userRef, {
+        completedLessons: completed,
+        completedAssignments: assignments
+      });
+
+      alert("Assignment marked as complete! ✅");
+    };
+  </script>
 </head>
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
 
@@ -85,63 +145,21 @@ age = int(input("Enter your age: "))
 </code></pre>
 
   <!-- Mark Complete -->
-  <button id="completeBtn" class="bg-green-600 text-white px-4 py-2 mt-6 rounded hover:bg-green-700">
+  <button onclick="markLessonComplete()" class="bg-green-600 text-white px-4 py-2 mt-6 rounded hover:bg-green-700">
     ✅ Mark Lesson as Complete
   </button>
 
-  
-
-  <script>
-    function markLessonComplete() {
-      let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
-      if (!completed.includes('lesson2')) {
-        completed.push('lesson2');
-        localStorage.setItem('completedLessons', JSON.stringify(completed));
-      }   
-
-      let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
-      if (!assignments.includes('lesson2')) {
-        assignments.push('lesson2');
-        localStorage.setItem('completedAssignments', JSON.stringify(assignments));
-      }
-
-      alert('Lesson 2 marked as complete! ✅');
-    }
-  </script>
-
-  <!-- Mark Assignment Complete Button -->
-  <button id="markAssignmentBtn" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
+  <button onclick="markAssignmentComplete()" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
     📝 Mark Assignment as Complete
   </button>
 
-  <script>
-    document.getElementById("markAssignmentBtn").addEventListener("click", () => {
-      let assignments = JSON.parse(localStorage.getItem("completedAssignments")) || [];
-      const lessonId = window.location.pathname.split("/").pop().split(".")[0]; // e.g., lesson1
-
-      if (!assignments.includes(lessonId)) {
-        assignments.push(lessonId);
-        localStorage.setItem("completedAssignments", JSON.stringify(assignments));
-          alert("Assignment marked as complete! ✅");
-      } else {
-        alert("You already completed this assignment.");
-      }
-    });
-  </script>
-
-    <!-- FIXED: Proper back link -->
   <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
-
 
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
     <strong>Disclaimer:</strong><br>
-    Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes. Pyforus does not claim ownership of any video content provided by Khan Academy and does not monetize, alter, or redistribute their material in any form.<br><br>
-    Khan Academy is a nonprofit organization that offers free educational resources to learners worldwide. All rights to the embedded videos, trademarks, and related content remain the exclusive property of Khan Academy. We strongly encourage users to visit and support Khan Academy directly at <a href="https://www.khanacademy.org" class="underline text-blue-600">www.khanacademy.org</a>.
-    <br />
-    <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="text-blue-600 underline" target="_blank">
-      📄 View Site License
-    </a>
-
+    Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes. <br />
+    Khan Academy is a nonprofit offering free educational resources. Visit <a href="https://www.khanacademy.org" class="underline text-blue-600">www.khanacademy.org</a>.<br />
+    <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="text-blue-600 underline" target="_blank">📄 View Site License</a>
   </footer>
 
 </body>

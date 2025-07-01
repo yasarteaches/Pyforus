@@ -6,10 +6,11 @@
   <title>Lesson 5: Drawing with Turtle</title>
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Firebase Integration -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
-    import { getFirestore, doc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
@@ -23,42 +24,61 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+    let currentUser = null;
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "../login.html";
       } else {
-        window.userEmail = user.email;
+        currentUser = user;
+        const uid = user.uid;
+        const ref = doc(db, "users", uid);
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+          const data = snap.data();
+          localStorage.setItem("completedLessons", JSON.stringify(data.completedLessons || []));
+          localStorage.setItem("completedAssignments", JSON.stringify(data.completedAssignments || []));
+        } else {
+          await setDoc(ref, {
+            completedLessons: [],
+            completedAssignments: [],
+            quiz1to4Score: null,
+            finalScore: null
+          });
+        }
       }
     });
 
-    window.markLessonComplete = async () => {
-      const lessonId = 'lesson5';
-      let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
-      if (!completed.includes(lessonId)) {
-        completed.push(lessonId);
-        localStorage.setItem('completedLessons', JSON.stringify(completed));
-      }
-      let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
-      if (!assignments.includes(lessonId)) {
-        assignments.push(lessonId);
-        localStorage.setItem('completedAssignments', JSON.stringify(assignments));
-      }
-      if (window.userEmail) {
-        const userRef = doc(db, 'users', window.userEmail);
-        await updateDoc(userRef, {
-          completedLessons: arrayUnion(lessonId),
-          completedAssignments: arrayUnion(lessonId)
-        });
-      }
-      alert('Lesson 5 marked as complete! ✅');
-    }
+    window.markLessonComplete = async function () {
+      if (!currentUser) return alert("You must be logged in.");
+      const uid = currentUser.uid;
+      const ref = doc(db, "users", uid);
+      const lessonId = "lesson5";
+
+      let completedLessons = JSON.parse(localStorage.getItem("completedLessons")) || [];
+      let completedAssignments = JSON.parse(localStorage.getItem("completedAssignments")) || [];
+
+      if (!completedLessons.includes(lessonId)) completedLessons.push(lessonId);
+      if (!completedAssignments.includes(lessonId)) completedAssignments.push(lessonId);
+
+      localStorage.setItem("completedLessons", JSON.stringify(completedLessons));
+      localStorage.setItem("completedAssignments", JSON.stringify(completedAssignments));
+
+      await updateDoc(ref, {
+        completedLessons,
+        completedAssignments
+      });
+
+      alert("Lesson 5 marked as complete! ✅");
+    };
   </script>
 </head>
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
 
   <h1 class="text-3xl font-bold mb-4">🎨 Lesson 5: Drawing with Turtle</h1>
-  <p class="mb-6 text-gray-700">Welcome to your first graphics lesson! Today, we will explore Python's <code>turtle</code> module, which lets you draw on the screen using code.</p>
+  <p class="mb-6 text-gray-700">
+    Welcome to your first graphics lesson! Today, we will explore Python's <code>turtle</code> module, which lets you draw on the screen using code.
+  </p>
 
   <div class="mb-6">
     <h2 class="text-xl font-semibold mb-2">📘 What is Turtle?</h2>
@@ -127,10 +147,10 @@ window.mainloop()</code></pre>
     <strong>Disclaimer:</strong><br>
     Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes. Pyforus does not claim ownership of any video content provided by Khan Academy and does not monetize, alter, or redistribute their material in any form.<br><br>
     Khan Academy is a nonprofit organization that offers free educational resources to learners worldwide. All rights to the embedded videos, trademarks, and related content remain the exclusive property of Khan Academy. We strongly encourage users to visit and support Khan Academy directly at <a href="https://www.khanacademy.org" class="underline text-blue-600">www.khanacademy.org</a>.
-   <br />
-   <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="text-blue-600 underline" target="_blank">
+    <br />
+    <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="text-blue-600 underline" target="_blank">
       📄 View Site License
-   </a>
+    </a>
   </footer>
 
 </body>

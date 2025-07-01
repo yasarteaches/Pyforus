@@ -10,7 +10,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
@@ -25,81 +25,82 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    let currentUser = null;
+
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "../login.html";
+        return;
+      }
+      currentUser = user;
+      const ref = doc(db, "users", user.uid);
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        const data = snap.data();
+        localStorage.setItem("completedLessons", JSON.stringify(data.completedLessons || []));
+        localStorage.setItem("completedAssignments", JSON.stringify(data.completedAssignments || []));
       } else {
-        const uid = user.uid;
-        const docRef = doc(db, "progress", uid);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          localStorage.setItem("completedLessons", JSON.stringify(data.completedLessons || []));
-          localStorage.setItem("completedAssignments", JSON.stringify(data.completedAssignments || []));
-        }
+        await setDoc(ref, {
+          completedLessons: [],
+          completedAssignments: [],
+          quiz1to4Score: null,
+          finalScore: null
+        });
       }
     });
 
     window.markLessonComplete = async function () {
-      const user = auth.currentUser;
-      if (!user) return alert("You must be logged in.");
+      if (!currentUser) return alert("You must be logged in.");
+      const uid = currentUser.uid;
+      const userRef = doc(db, "users", uid);
 
-      const uid = user.uid;
-      let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
-      if (!completed.includes('lesson1')) {
-        completed.push('lesson1');
-        localStorage.setItem('completedLessons', JSON.stringify(completed));
-      }   
+      let completed = JSON.parse(localStorage.getItem("completedLessons")) || [];
+      if (!completed.includes("lesson1")) completed.push("lesson1");
 
-      let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
-      if (!assignments.includes('lesson1')) {
-        assignments.push('lesson1');
-        localStorage.setItem('completedAssignments', JSON.stringify(assignments));
-      }
+      let assignments = JSON.parse(localStorage.getItem("completedAssignments")) || [];
 
-      await setDoc(doc(db, "progress", uid), {
+      localStorage.setItem("completedLessons", JSON.stringify(completed));
+      localStorage.setItem("completedAssignments", JSON.stringify(assignments));
+
+      await updateDoc(userRef, {
         completedLessons: completed,
         completedAssignments: assignments
       });
 
-      alert('Lesson 1 marked as complete! ✅');
-    }
+      alert("Lesson 1 marked as complete! ✅");
+    };
 
     window.markAssignmentComplete = async function () {
-      const user = auth.currentUser;
-      if (!user) return alert("You must be logged in.");
-      const uid = user.uid;
+      if (!currentUser) return alert("You must be logged in.");
+      const uid = currentUser.uid;
+      const userRef = doc(db, "users", uid);
 
       let assignments = JSON.parse(localStorage.getItem("completedAssignments")) || [];
-      if (!assignments.includes("lesson1")) {
-        assignments.push("lesson1");
-        localStorage.setItem("completedAssignments", JSON.stringify(assignments));
+      let completed = JSON.parse(localStorage.getItem("completedLessons")) || [];
 
-        let completed = JSON.parse(localStorage.getItem("completedLessons")) || [];
-        await setDoc(doc(db, "progress", uid), {
-          completedLessons: completed,
-          completedAssignments: assignments
-        });
+      if (!assignments.includes("lesson1")) assignments.push("lesson1");
+      localStorage.setItem("completedAssignments", JSON.stringify(assignments));
 
-        alert("Assignment marked as complete! ✅");
-      } else {
-        alert("You already completed this assignment.");
-      }
-    }
+      await updateDoc(userRef, {
+        completedLessons: completed,
+        completedAssignments: assignments
+      });
+
+      alert("Assignment marked as complete! ✅");
+    };
   </script>
 </head>
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
 
   <h1 class="text-3xl font-bold mb-4">🐍 Lesson 1: Introduction to Python</h1>
 
-  <p class="mb-6 text-gray-800">
-    Welcome to your first step into the world of Python! Python is one of the most popular and beginner-friendly programming languages used in fields ranging from web development and automation to data science, AI, and robotics. It is known for its simple and readable syntax, making it an ideal choice for newcomers.
+  <p class="mb-6">
+    Welcome to your first step into the world of Python! Python is one of the most popular and beginner-friendly programming languages used in fields ranging from web development and automation to data science, AI, and robotics.
   </p>
 
   <div class="mb-6">
     <h2 class="text-xl font-semibold mb-2">📘 Why Python?</h2>
-    <ul class="list-disc list-inside text-gray-800">
+    <ul class="list-disc list-inside">
       <li>Easy to read and write</li>
       <li>Large community and lots of tutorials</li>
       <li>Used by companies like Google, Netflix, and NASA</li>
@@ -109,17 +110,15 @@
 
   <div class="mb-6">
     <h2 class="text-xl font-semibold mb-2">🧠 What Will You Learn?</h2>
-    <p>In this lesson, you will:</p>
-    <ul class="list-disc list-inside text-gray-800">
+    <ul class="list-disc list-inside">
       <li>Write and run your first Python program</li>
       <li>Understand basic concepts like output and variables</li>
       <li>Use strings and numbers</li>
-      <li>Get ready for interactive Python lessons ahead!</li>
     </ul>
   </div>
 
   <h2 class="text-xl font-semibold mb-2">🎯 Learning Objectives</h2>
-  <ul class="list-disc list-inside mb-6 text-gray-800">
+  <ul class="list-disc list-inside mb-6">
     <li>Understand what Python is and where it’s used.</li>
     <li>Write and run your first Python program.</li>
     <li>Use the <code>print()</code> function to display output.</li>
@@ -127,7 +126,7 @@
   </ul>
 
   <h2 class="text-xl font-semibold mb-2">💻 Code Examples</h2>
-  <pre class="bg-gray-100 p-4 rounded mb-6 text-sm overflow-x-auto"><code># This is a comment
+  <pre class="bg-gray-100 p-4 rounded mb-6 text-sm"><code># This is a comment
 print("Hello, world!")
 
 # Variables
@@ -138,42 +137,36 @@ print(age)</code></pre>
 
   <div class="mb-6">
     <h2 class="text-xl font-semibold mb-2">📌 More Examples</h2>
-    <p class="mb-2">You can also do math with Python:</p>
-    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code>print(3 + 2)      # Addition
-print(10 - 4)     # Subtraction
-print(6 * 7)      # Multiplication
-print(20 / 5)     # Division</code></pre>
+    <pre class="bg-gray-100 p-4 rounded text-sm mb-4"><code>print(3 + 2)
+print(10 - 4)
+print(6 * 7)
+print(20 / 5)</code></pre>
 
-    <p class="mt-4 mb-2">And combine text using variables:</p>
-    <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code>greeting = "Hi"
+    <pre class="bg-gray-100 p-4 rounded text-sm"><code>greeting = "Hi"
 name = "Ali"
 print(greeting + ", " + name + "!")</code></pre>
   </div>
 
   <h2 class="text-xl font-semibold mb-2">📝 Your Assignment</h2>
   <p class="mb-4">Write a Python program that prints your name and your favorite number. Here's a starter:</p>
-  <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto"><code># Your code here:
-print("My name is ___")
+  <pre class="bg-gray-100 p-4 rounded text-sm mb-6"><code>print("My name is ___")
 print("My favorite number is ___")</code></pre>
 
-  <button id="completeBtn" class="bg-green-600 text-white px-4 py-2 mt-6 rounded hover:bg-green-700" onclick="markLessonComplete()">
+  <button onclick="markLessonComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mt-4">
     ✅ Mark Lesson as Complete
   </button>
 
-  <button id="markAssignmentBtn" onclick="markAssignmentComplete()" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
+  <button onclick="markAssignmentComplete()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 mt-4 ml-2">
     📝 Mark Assignment as Complete
   </button>
 
-  <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
+  <a href="../dashboard.html" class="block mt-6 text-blue-600 underline">← Back to Dashboard</a>
 
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
     <strong>Disclaimer:</strong><br>
-    Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes. Pyforus does not claim ownership of any video content provided by Khan Academy and does not monetize, alter, or redistribute their material in any form.<br><br>
-    Khan Academy is a nonprofit organization that offers free educational resources to learners worldwide. All rights to the embedded videos, trademarks, and related content remain the exclusive property of Khan Academy. We strongly encourage users to visit and support Khan Academy directly at <a href="https://www.khanacademy.org" class="underline text-blue-600">www.khanacademy.org</a>.
-    <br />
-    <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="text-blue-600 underline" target="_blank">
-      📄 View Site License
-    </a>
+    Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources.<br>
+    This site includes embedded videos from Khan Academy solely for educational purposes. Visit <a href="https://www.khanacademy.org" class="underline text-blue-600">www.khanacademy.org</a>.<br>
+    <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="underline text-blue-600" target="_blank">📄 View Site License</a>
   </footer>
 
 </body>

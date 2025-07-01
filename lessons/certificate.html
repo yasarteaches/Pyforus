@@ -6,10 +6,11 @@
   <title>Pyforus Certificate</title>
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Firebase Auth -->
+  <!-- Firebase: Auth + Firestore -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
@@ -22,10 +23,35 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "../login.html";
+        return;
+      }
+
+      // Try loading name and certificate ID from Firestore if needed (optional)
+      const userRef = doc(db, "users", user.uid);
+      const snap = await getDoc(userRef);
+      if (snap.exists()) {
+        const data = snap.data();
+        if (data.finalScore >= 60) {
+          // Optionally set localStorage from Firestore
+          if (!localStorage.getItem("studentName") && user.displayName) {
+            localStorage.setItem("studentName", user.displayName);
+          }
+          if (!localStorage.getItem("certificateId")) {
+            const generatedId = 'PYF-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+            localStorage.setItem("certificateId", generatedId);
+          }
+        } else {
+          alert("❌ You have not passed the final quiz yet.");
+          window.location.href = "../dashboard.html";
+        }
+      } else {
+        alert("⚠️ No user data found.");
+        window.location.href = "../dashboard.html";
       }
     });
   </script>
@@ -45,10 +71,10 @@
 </head>
 <body class="bg-white text-gray-900 p-4">
 
-  <!-- 📜 Certificate Image Only -->
+  <!-- 📜 Certificate Display -->
   <div id="certificate" class="certificate-wrapper max-w-4xl mx-auto shadow-lg rounded-xl overflow-hidden border border-gray-300"></div>
 
-  <!-- 📥 Download and Back Links -->
+  <!-- 📥 Download and Back -->
   <div class="text-center mt-6">
     <button onclick="downloadPDF()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
       📥 Download PDF
@@ -56,7 +82,7 @@
     <a href="../dashboard.html" class="block mt-2 text-blue-600 underline">← Back to Dashboard</a>
   </div>
 
-  <!-- 📸 Export to PDF Script -->
+  <!-- PDF Export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
@@ -75,7 +101,7 @@
     }
   </script>
 
-  <!-- Dynamic Name and ID -->
+  <!-- Dynamic Name + ID Render -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const name = localStorage.getItem("studentName") || "Your Name";

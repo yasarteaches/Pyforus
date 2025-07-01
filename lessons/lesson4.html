@@ -5,6 +5,90 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lesson 4: Functions</title>
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Firebase Auth + Firestore -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
+      authDomain: "pyforus-4289e.firebaseapp.com",
+      projectId: "pyforus-4289e",
+      storageBucket: "pyforus-4289e.appspot.com",
+      messagingSenderId: "798083294290",
+      appId: "1:798083294290:web:c19d4c169c451410062b8b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    let currentUser = null;
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "../login.html";
+      } else {
+        currentUser = user;
+        const uid = user.uid;
+        const ref = doc(db, "users", uid);
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+          const data = snap.data();
+          localStorage.setItem("completedLessons", JSON.stringify(data.completedLessons || []));
+          localStorage.setItem("completedAssignments", JSON.stringify(data.completedAssignments || []));
+        } else {
+          await setDoc(ref, {
+            completedLessons: [],
+            completedAssignments: [],
+            quiz1to4Score: null,
+            finalScore: null
+          });
+        }
+      }
+    });
+
+    window.markLessonComplete = async function () {
+      if (!currentUser) return alert("You must be logged in.");
+      const uid = currentUser.uid;
+      const ref = doc(db, "users", uid);
+
+      let completed = JSON.parse(localStorage.getItem("completedLessons")) || [];
+      if (!completed.includes("lesson4")) completed.push("lesson4");
+
+      let assignments = JSON.parse(localStorage.getItem("completedAssignments")) || [];
+
+      localStorage.setItem("completedLessons", JSON.stringify(completed));
+      localStorage.setItem("completedAssignments", JSON.stringify(assignments));
+
+      await updateDoc(ref, {
+        completedLessons: completed,
+        completedAssignments: assignments
+      });
+
+      alert("Lesson 4 marked as complete! ✅");
+    };
+
+    window.markAssignmentComplete = async function () {
+      if (!currentUser) return alert("You must be logged in.");
+      const uid = currentUser.uid;
+      const ref = doc(db, "users", uid);
+
+      let assignments = JSON.parse(localStorage.getItem("completedAssignments")) || [];
+      let completed = JSON.parse(localStorage.getItem("completedLessons")) || [];
+
+      if (!assignments.includes("lesson4")) assignments.push("lesson4");
+      localStorage.setItem("completedAssignments", JSON.stringify(assignments));
+
+      await updateDoc(ref, {
+        completedLessons: completed,
+        completedAssignments: assignments
+      });
+
+      alert("Assignment marked as complete! ✅");
+    };
+  </script>
 </head>
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
 
@@ -55,81 +139,15 @@ print(result)</code></pre>
 print(square(7))</code></pre>
   </div>
 
-  <button id="markCompleteBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+  <button onclick="markLessonComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
     ✅ Mark as Complete
   </button>
 
-  <button id="markAssignmentBtn" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
+  <button onclick="markAssignmentComplete()" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
     📝 Mark Assignment as Complete
   </button>
 
   <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
-      authDomain: "pyforus-4289e.firebaseapp.com",
-      projectId: "pyforus-4289e",
-      storageBucket: "pyforus-4289e.appspot.com",
-      messagingSenderId: "798083294290",
-      appId: "1:798083294290:web:c19d4c169c451410062b8b"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "../login.html";
-      } else {
-        const uid = user.uid;
-        const userRef = doc(db, "userProgress", uid);
-
-        document.getElementById("markCompleteBtn").addEventListener("click", async () => {
-          const snap = await getDoc(userRef);
-          const data = snap.exists() ? snap.data() : {};
-
-          const updatedLessons = Array.isArray(data.completedLessons) ? data.completedLessons : [];
-          if (!updatedLessons.includes("lesson4")) {
-            updatedLessons.push("lesson4");
-          }
-
-          const updatedAssignments = Array.isArray(data.completedAssignments) ? data.completedAssignments : [];
-          if (!updatedAssignments.includes("lesson4")) {
-            updatedAssignments.push("lesson4");
-          }
-
-          await setDoc(userRef, {
-            completedLessons: updatedLessons,
-            completedAssignments: updatedAssignments
-          }, { merge: true });
-
-          alert("Lesson 4 marked as complete! ✅");
-        });
-
-        document.getElementById("markAssignmentBtn").addEventListener("click", async () => {
-          const snap = await getDoc(userRef);
-          const data = snap.exists() ? snap.data() : {};
-          const updatedAssignments = Array.isArray(data.completedAssignments) ? data.completedAssignments : [];
-
-          if (!updatedAssignments.includes("lesson4")) {
-            updatedAssignments.push("lesson4");
-            await setDoc(userRef, {
-              completedAssignments: updatedAssignments
-            }, { merge: true });
-            alert("Assignment marked as complete! ✅");
-          } else {
-            alert("You already completed this assignment.");
-          }
-        });
-      }
-    });
-  </script>
 
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
     <strong>Disclaimer:</strong><br>

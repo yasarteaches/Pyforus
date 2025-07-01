@@ -9,6 +9,7 @@
   <script type="module">
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
@@ -21,131 +22,161 @@
 
     const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    onAuthStateChanged(auth, (user) => {
+    let currentUser = null;
+
+    onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "../login.html";
+        return;
       }
+      currentUser = user;
     });
+
+    window.saveProgressToFirestore = async (score) => {
+      if (!currentUser) return;
+      const userRef = doc(db, "users", currentUser.uid);
+      const snap = await getDoc(userRef);
+      if (snap.exists()) {
+        const data = snap.data();
+        const updated = {
+          quiz1to4Score: score,
+          completedLessons: data.completedLessons?.includes('quiz1to4')
+            ? data.completedLessons
+            : [...(data.completedLessons || []), 'quiz1to4']
+        };
+        await updateDoc(userRef, updated);
+      } else {
+        await setDoc(userRef, {
+          quiz1to4Score: score,
+          completedLessons: ['quiz1to4'],
+          completedAssignments: [],
+          finalScore: null
+        });
+      }
+    };
   </script>
 </head>
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const prev = localStorage.getItem('quiz1to4Score');
-      if (prev !== null) {
-        const note = document.createElement('p');
-        note.className = 'text-sm text-gray-500 mb-4';
-        note.textContent = `📊 Previous attempt: ${prev}%`;
-        const form = document.getElementById('quizForm');
-        if (form) {
-          form.parentNode.insertBefore(note, form);
-        }
-      }
-    });
-  </script>
 
   <h1 class="text-3xl font-bold mb-6">🧠 Quiz: Review of Lessons 1–4</h1>
   <p class="mb-6">This quiz will test your understanding of the first four lessons: Introduction to Python, Variables, Strings & Numbers, and User Input.</p>
 
   <form id="quizForm" class="space-y-8">
-    <!-- Questions (same as before, omitted here for brevity) -->
-    <!-- Insert Q1–Q5 blocks here like in your original file -->
-    <!-- (Unchanged since no errors in that section) -->
+    <div>
+      <p class="font-semibold">1. Which keyword is used to define a function in Python?</p>
+      <label><input type="radio" name="q1" value="a" class="mr-2"> function</label><br>
+      <label><input type="radio" name="q1" value="b" class="mr-2"> define</label><br>
+      <label><input type="radio" name="q1" value="c" class="mr-2"> def</label><br>
+      <label><input type="radio" name="q1" value="d" class="mr-2"> func</label>
+    </div>
+    <div>
+      <p class="font-semibold">2. What symbol is used for comments in Python?</p>
+      <label><input type="radio" name="q2" value="a" class="mr-2"> // </label><br>
+      <label><input type="radio" name="q2" value="b" class="mr-2"> <!-- --> </label><br>
+      <label><input type="radio" name="q2" value="c" class="mr-2"> # </label><br>
+      <label><input type="radio" name="q2" value="d" class="mr-2"> /* */ </label>
+    </div>
+    <div>
+      <p class="font-semibold">3. Which data type represents numbers with decimals?</p>
+      <label><input type="radio" name="q3" value="a" class="mr-2"> int</label><br>
+      <label><input type="radio" name="q3" value="b" class="mr-2"> float</label><br>
+      <label><input type="radio" name="q3" value="c" class="mr-2"> str</label><br>
+      <label><input type="radio" name="q3" value="d" class="mr-2"> bool</label>
+    </div>
+    <div>
+      <p class="font-semibold">4. What does the `input()` function return?</p>
+      <label><input type="radio" name="q4" value="a" class="mr-2"> int</label><br>
+      <label><input type="radio" name="q4" value="b" class="mr-2"> bool</label><br>
+      <label><input type="radio" name="q4" value="c" class="mr-2"> str</label><br>
+      <label><input type="radio" name="q4" value="d" class="mr-2"> float</label>
+    </div>
+    <div>
+      <p class="font-semibold">5. What is the result of 3 ** 2?</p>
+      <label><input type="radio" name="q5" value="a" class="mr-2"> 6</label><br>
+      <label><input type="radio" name="q5" value="b" class="mr-2"> 9</label><br>
+      <label><input type="radio" name="q5" value="c" class="mr-2"> 8</label><br>
+      <label><input type="radio" name="q5" value="d" class="mr-2"> Error</label>
+    </div>
 
-    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Submit Quiz</button>
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">📤 Submit Quiz</button>
   </form>
 
-  <div id="result" class="mt-8 text-lg font-semibold"></div>
+  <div id="result" class="mt-6 text-lg font-semibold"></div>
 
-  <button id="markQuizBtn" onclick="markQuizComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mt-4" style="display: none;">
+  <button id="markQuizBtn" onclick="markQuizComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mt-4 hidden">
     ✅ Mark Quiz as Complete
   </button>
 
-  <script>
-    document.getElementById('quizForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const answers = { q1: 'c', q2: 'c', q3: 'b', q4: 'c', q5: 'b' };
-      let score = 0;
+  <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
 
-      // Clear previous highlights
-      document.querySelectorAll('.incorrect').forEach(el => el.classList.remove('bg-red-100', 'border', 'border-red-400', 'p-2', 'rounded'));
+  <script>
+    const answers = { q1: 'c', q2: 'c', q3: 'b', q4: 'c', q5: 'b' };
+
+    document.getElementById("quizForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      let score = 0;
 
       for (let q in answers) {
         const selected = document.querySelector(`input[name="${q}"]:checked`);
-        const allQuestionDivs = document.querySelectorAll('form > div');
-        const questionDiv = selected?.closest('div') || allQuestionDivs[parseInt(q.slice(1)) - 1];
+        const block = selected?.closest("div");
 
-        if (!selected) continue; // Skip if user didn't answer this question
-
-        if (selected.value === answers[q]) {
+        if (selected?.value === answers[q]) {
           score++;
         } else {
-          questionDiv.classList.add('incorrect', 'bg-red-100', 'border', 'border-red-400', 'p-2', 'rounded');
-          const correctLabel = [...questionDiv.querySelectorAll('label')].find(label =>
-            label.querySelector('input')?.value === answers[q]
-          );
-          if (correctLabel && !questionDiv.querySelector('.correct-note')) {
-            const note = document.createElement('div');
-            note.className = 'text-sm text-green-600 mt-2 correct-note';
-            note.textContent = `✔ Correct answer: "${correctLabel.textContent.trim()}"`;
-            questionDiv.appendChild(note);
+          if (block) {
+            block.classList.add("bg-red-100", "border", "border-red-400", "p-2", "rounded");
+            const correct = [...block.querySelectorAll("label")].find(l => l.textContent.trim().endsWith(answers[q]));
+            const note = document.createElement("div");
+            note.textContent = `✔ Correct answer: "${answers[q]}"`;
+            note.className = "text-green-600 text-sm mt-2";
+            block.appendChild(note);
           }
         }
       }
 
       const percent = Math.round((score / 5) * 100);
-      localStorage.setItem('quiz1to4Score', percent);
+      localStorage.setItem("quiz1to4Score", percent);
 
-      const result = document.getElementById('result');
+      const result = document.getElementById("result");
       const submitBtn = document.querySelector('button[type="submit"]');
 
       if (percent >= 60) {
-        let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
-        if (!completed.includes('quiz1to4')) {
-          completed.push('quiz1to4');
-          localStorage.setItem('completedLessons', JSON.stringify(completed));
-        }
-        result.className = 'mt-8 text-green-600 font-semibold';
-        result.innerHTML = `✅ You passed with a score of ${percent}%. You can now continue.`;
-        document.getElementById('markQuizBtn').style.display = 'inline-block';
+        result.className = "mt-6 text-green-600 font-semibold";
+        result.textContent = `✅ You passed with ${percent}%. You may continue.`;
+        document.getElementById("markQuizBtn").classList.remove("hidden");
         submitBtn.disabled = true;
-        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        await saveProgressToFirestore(percent);
+
+        // Update local progress
+        let completed = JSON.parse(localStorage.getItem("completedLessons")) || [];
+        if (!completed.includes("quiz1to4")) {
+          completed.push("quiz1to4");
+          localStorage.setItem("completedLessons", JSON.stringify(completed));
+        }
       } else {
-        result.className = 'mt-8 text-red-600 font-semibold';
-        result.innerHTML = `❌ You scored ${percent}%. Review the lessons and <a href="#" id="try-again" class="underline text-blue-600">try again</a>.`;
+        result.className = "mt-6 text-red-600 font-semibold";
+        result.innerHTML = `❌ You scored ${percent}%. Please <a href="#" id="try-again" class="text-blue-600 underline">try again</a>.`;
       }
     });
 
-    document.addEventListener('click', function (e) {
-      if (e.target.id === 'try-again') {
+    document.addEventListener("click", (e) => {
+      if (e.target.id === "try-again") {
         e.preventDefault();
-        document.getElementById('quizForm').reset();
-        document.getElementById('result').innerHTML = '';
-        document.getElementById('markQuizBtn').style.display = 'none';
-
-        document.querySelectorAll('.incorrect').forEach(el => {
-          el.classList.remove('bg-red-100', 'border', 'border-red-400', 'p-2', 'rounded');
-          const note = el.querySelector('.correct-note');
-          if (note) note.remove();
-        });
-
-        const btn = document.querySelector('button[type="submit"]');
-        btn.disabled = false;
-        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        document.getElementById("quizForm").reset();
+        document.getElementById("result").innerHTML = "";
+        document.getElementById("markQuizBtn").classList.add("hidden");
+        document.querySelectorAll(".bg-red-100").forEach(el => el.classList.remove("bg-red-100", "border", "border-red-400", "p-2", "rounded"));
+        document.querySelectorAll(".text-green-600").forEach(el => el.remove());
+        document.querySelector('button[type="submit"]').disabled = false;
       }
     });
 
     function markQuizComplete() {
-      alert('Quiz marked as complete! ✅');
+      alert("Quiz marked as complete ✅");
     }
   </script>
-
-  <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
-  <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="text-blue-600 underline" target="_blank">
-    📄 View Site License
-  </a>
 
 </body>
 </html>

@@ -5,12 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lesson 6: Data & Lists</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js" type="module"></script>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
@@ -24,7 +23,6 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-
     let currentUser = null;
 
     onAuthStateChanged(auth, async (user) => {
@@ -32,72 +30,81 @@
         window.location.href = "../login.html";
       } else {
         currentUser = user;
+        const uid = user.uid;
+        const userRef = doc(db, "users", uid);
+        const snap = await getDoc(userRef);
+        if (!snap.exists()) {
+          await setDoc(userRef, {
+            completedLessons: [],
+            completedAssignments: [],
+            quiz1to4Score: null,
+            finalScore: null
+          });
+        }
       }
     });
 
     window.markComplete = async () => {
-      let completed = JSON.parse(localStorage.getItem('completedLessons')) || [];
-      if (!completed.includes('lesson6')) {
-        completed.push('lesson6');
-        localStorage.setItem('completedLessons', JSON.stringify(completed));
-      }
+      if (!currentUser) return;
 
-      let assignments = JSON.parse(localStorage.getItem('completedAssignments')) || [];
-      if (!assignments.includes('lesson6')) {
-        assignments.push('lesson6');
-        localStorage.setItem('completedAssignments', JSON.stringify(assignments));
-      }
+      const lessonId = "lesson6";
+      const uid = currentUser.uid;
+      const userRef = doc(db, "users", uid);
+      const snap = await getDoc(userRef);
+      const data = snap.exists() ? snap.data() : {};
 
-      if (currentUser) {
-        const userRef = doc(db, "users", currentUser.uid);
-        const snapshot = await getDoc(userRef);
-        const data = snapshot.exists() ? snapshot.data() : {};
+      let completedLessons = data.completedLessons || [];
+      let completedAssignments = data.completedAssignments || [];
 
-        const updatedData = {
-          completedLessons: [...new Set([...(data.completedLessons || []), 'lesson6'])],
-          completedAssignments: [...new Set([...(data.completedAssignments || []), 'lesson6'])]
-        };
+      if (!completedLessons.includes(lessonId)) completedLessons.push(lessonId);
+      if (!completedAssignments.includes(lessonId)) completedAssignments.push(lessonId);
 
-        await setDoc(userRef, updatedData, { merge: true });
-      }
+      localStorage.setItem("completedLessons", JSON.stringify(completedLessons));
+      localStorage.setItem("completedAssignments", JSON.stringify(completedAssignments));
 
-      alert('Lesson 6 marked as complete! ✅');
+      await setDoc(userRef, {
+        completedLessons,
+        completedAssignments
+      }, { merge: true });
+
+      alert("Lesson 6 marked as complete! ✅");
     };
 
-    document.getElementById("markAssignmentBtn").addEventListener("click", async () => {
+    window.markAssignmentComplete = async () => {
+      if (!currentUser) return;
+
       const lessonId = "lesson6";
-      let assignments = JSON.parse(localStorage.getItem("completedAssignments")) || [];
+      const uid = currentUser.uid;
+      const userRef = doc(db, "users", uid);
+      const snap = await getDoc(userRef);
+      const data = snap.exists() ? snap.data() : {};
 
-      if (!assignments.includes(lessonId)) {
-        assignments.push(lessonId);
-        localStorage.setItem("completedAssignments", JSON.stringify(assignments));
+      let completedAssignments = data.completedAssignments || [];
 
-        if (currentUser) {
-          const userRef = doc(db, "users", currentUser.uid);
-          const snapshot = await getDoc(userRef);
-          const data = snapshot.exists() ? snapshot.data() : {};
+      if (!completedAssignments.includes(lessonId)) {
+        completedAssignments.push(lessonId);
+        localStorage.setItem("completedAssignments", JSON.stringify(completedAssignments));
 
-          const updatedAssignments = [...new Set([...(data.completedAssignments || []), lessonId])];
-          await setDoc(userRef, { completedAssignments: updatedAssignments }, { merge: true });
-        }
+        await setDoc(userRef, {
+          completedAssignments
+        }, { merge: true });
 
         alert("Assignment marked as complete! ✅");
       } else {
         alert("You already completed this assignment.");
       }
-    });
+    };
   </script>
 </head>
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
   <h1 class="text-3xl font-bold mb-4">📦 Lesson 6: Data & Lists</h1>
-  <p class="mb-6">In this lesson, you'll learn about Python's list data structure — one of the most powerful tools in your programming toolbox. Lists can store groups of data, making it easy to organize and work with information efficiently.</p>
+  <p class="mb-6">In this lesson, you'll learn about Python's list data structure — one of the most powerful tools in your programming toolbox.</p>
 
   <div class="relative pt-[56.25%] mb-6">
     <iframe class="absolute top-0 left-0 w-full h-full rounded-xl"
       src="https://www.youtube.com/embed/IaEcrHxjoCM"
       title="Introduction to Lists – Khan Academy"
-      allowfullscreen>
-    </iframe>
+      allowfullscreen></iframe>
   </div>
 
   <h2 class="text-xl font-semibold mb-2">🔍 What is a List?</h2>
@@ -132,7 +139,7 @@ print(numbers[:2])     # [1, 3]</code></pre>
     ✅ Mark Lesson as Complete
   </button>
 
-  <button id="markAssignmentBtn" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
+  <button onclick="markAssignmentComplete()" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
     📝 Mark Assignment as Complete
   </button>
 
@@ -140,8 +147,8 @@ print(numbers[:2])     # [1, 3]</code></pre>
 
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
     <strong>Disclaimer:</strong><br>
-    Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes. Pyforus does not claim ownership of any video content provided by Khan Academy and does not monetize, alter, or redistribute their material in any form.<br><br>
-    Khan Academy is a nonprofit organization that offers free educational resources to learners worldwide. All rights to the embedded videos, trademarks, and related content remain the exclusive property of Khan Academy. We strongly encourage users to visit and support Khan Academy directly at <a href="https://www.khanacademy.org" class="underline text-blue-600">www.khanacademy.org</a>.
+    Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes.<br><br>
+    Khan Academy is a nonprofit organization that offers free educational resources to learners worldwide. Visit <a href="https://www.khanacademy.org" class="underline text-blue-600">www.khanacademy.org</a> to support them.
     <br />
     <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="text-blue-600 underline" target="_blank">
       📄 View Site License

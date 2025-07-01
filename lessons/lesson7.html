@@ -9,7 +9,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
@@ -24,66 +24,81 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    let currentUser = null;
+
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "../login.html";
       } else {
-        window.currentUser = user;
+        currentUser = user;
+        const uid = user.uid;
+        const userRef = doc(db, "users", uid);
+        const snap = await getDoc(userRef);
+        if (!snap.exists()) {
+          await setDoc(userRef, {
+            completedLessons: [],
+            completedAssignments: [],
+            quiz1to4Score: null,
+            finalScore: null
+          });
+        }
       }
     });
 
-    window.markLessonComplete = async function () {
-      const user = window.currentUser;
-      if (!user) return;
+    window.markLessonComplete = async () => {
+      if (!currentUser) return;
 
-      const userDocRef = doc(db, "progress", user.uid);
-      const userDoc = await getDoc(userDocRef);
+      const lessonId = "lesson7";
+      const uid = currentUser.uid;
+      const userRef = doc(db, "users", uid);
+      const snap = await getDoc(userRef);
+      const data = snap.exists() ? snap.data() : {};
 
-      let data = userDoc.exists() ? userDoc.data() : {};
-      data.completedLessons = data.completedLessons || [];
-      data.completedAssignments = data.completedAssignments || [];
+      const completedLessons = [...new Set([...(data.completedLessons || []), lessonId])];
+      const completedAssignments = [...new Set([...(data.completedAssignments || []), lessonId])];
 
-      if (!data.completedLessons.includes("lesson7")) data.completedLessons.push("lesson7");
-      if (!data.completedAssignments.includes("lesson7")) data.completedAssignments.push("lesson7");
+      localStorage.setItem("completedLessons", JSON.stringify(completedLessons));
+      localStorage.setItem("completedAssignments", JSON.stringify(completedAssignments));
 
-      await setDoc(userDocRef, data);
+      await setDoc(userRef, {
+        completedLessons,
+        completedAssignments
+      }, { merge: true });
+
       alert("Lesson 7 marked as complete! ✅");
     };
 
-    window.markAssignmentComplete = async function () {
-      const user = window.currentUser;
-      if (!user) return;
+    window.markAssignmentComplete = async () => {
+      if (!currentUser) return;
 
       const lessonId = "lesson7";
-      const userDocRef = doc(db, "progress", user.uid);
-      const userDoc = await getDoc(userDocRef);
+      const uid = currentUser.uid;
+      const userRef = doc(db, "users", uid);
+      const snap = await getDoc(userRef);
+      const data = snap.exists() ? snap.data() : {};
 
-      let data = userDoc.exists() ? userDoc.data() : {};
-      data.completedAssignments = data.completedAssignments || [];
+      const completedAssignments = [...new Set([...(data.completedAssignments || []), lessonId])];
 
-      if (!data.completedAssignments.includes(lessonId)) {
-        data.completedAssignments.push(lessonId);
-        await setDoc(userDocRef, data);
-        alert("Assignment marked as complete! ✅");
-      } else {
-        alert("You already completed this assignment.");
-      }
+      localStorage.setItem("completedAssignments", JSON.stringify(completedAssignments));
+
+      await setDoc(userRef, {
+        completedAssignments
+      }, { merge: true });
+
+      alert("Assignment marked as complete! ✅");
     };
   </script>
-
 </head>
 <body class="bg-white text-gray-900 p-6 max-w-3xl mx-auto">
   <h1 class="text-3xl font-bold mb-4">📘 Lesson 7: Dictionaries & Advanced Structures</h1>
-
   <p class="mb-6 text-gray-700">Dictionaries in Python allow you to store data using key-value pairs. They're very useful for organizing data that has labels.</p>
 
-  <!-- Dictionaries Video -->
+  <!-- Khan Academy Video -->
   <div class="relative pt-[56.25%] mb-6">
     <iframe class="absolute top-0 left-0 w-full h-full rounded-xl"
       src="https://www.youtube.com/embed/nf26Yv5JTOc"
       title="Dictionaries – Khan Academy"
-      allowfullscreen>
-    </iframe>
+      allowfullscreen></iframe>
   </div>
 
   <div class="mb-6">
@@ -105,8 +120,8 @@
 }
 
 print(student["name"])        # Ali
-student["age"] = 17            # Update value
-student["city"] = "Istanbul"   # Add new key-value pair
+student["age"] = 17           # Update value
+student["city"] = "Istanbul"  # Add new key-value pair
 
 for key in student:
     print(key, ":", student[key])</code></pre>
@@ -115,36 +130,33 @@ for key in student:
   <div class="mb-10">
     <h2 class="text-xl font-semibold mb-2">📝 Your Turn: Assignment</h2>
     <p class="mb-2">Create a dictionary-based contact book! Here's what it should do:</p>
-    <ul class="list-decimal pl-6 mb-2">
+    <ul class="list-decimal pl-6 mb-2 text-gray-800">
       <li>Ask the user for a name and phone number</li>
       <li>Store them in a dictionary</li>
       <li>Allow the user to enter multiple contacts</li>
       <li>Print all contacts at the end</li>
     </ul>
-    <p>Advanced idea: Use a loop and let the user type "done" when they want to stop.</p>
+    <p class="text-gray-600">Advanced idea: Use a loop and let the user type "done" when they want to stop.</p>
   </div>
 
   <button onclick="markLessonComplete()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
     ✅ Mark Lesson as Complete
   </button>
 
-  <button id="markAssignmentBtn" onclick="markAssignmentComplete()" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
+  <button onclick="markAssignmentComplete()" class="bg-purple-600 text-white px-4 py-2 mt-4 rounded hover:bg-purple-700">
     📝 Mark Assignment as Complete
   </button>
 
-  <!-- Back to Dashboard -->
   <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
 
-  <!-- Footer -->
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
     <strong>Disclaimer:</strong><br>
-    Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes. Pyforus does not claim ownership of any video content provided by Khan Academy and does not monetize, alter, or redistribute their material in any form.<br><br>
-    Khan Academy is a nonprofit organization that offers free educational resources to learners worldwide. All rights to the embedded videos, trademarks, and related content remain the exclusive property of Khan Academy. We strongly encourage users to visit and support Khan Academy directly at <a href="https://www.khanacademy.org" class="underline text-blue-600">www.khanacademy.org</a>.
+    Pyforus is an educational platform designed to help learners explore Python programming through custom lessons and curated resources. This site includes embedded videos from Khan Academy solely for educational purposes.<br><br>
+    Khan Academy is a nonprofit organization that offers free educational resources to learners worldwide. Visit <a href="https://www.khanacademy.org" class="underline text-blue-600">www.khanacademy.org</a> to support them.
     <br />
     <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="text-blue-600 underline" target="_blank">
       📄 View Site License
     </a>
   </footer>
-
 </body>
 </html>

@@ -6,9 +6,11 @@
   <title>Final Quiz – Pyforus</title>
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Firebase + Firestore + Auth -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
@@ -21,12 +23,23 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    onAuthStateChanged(auth, (user) => {
+    let currentUser = null;
+
+    onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        window.location.href = "../login.html"; // or just "login.html" depending on the file location
+        window.location.href = "../login.html";
+      } else {
+        currentUser = user;
       }
     });
+
+    window.saveFinalScoreToFirestore = async (score) => {
+      if (!currentUser) return;
+      const userRef = doc(db, "users", currentUser.uid);
+      await setDoc(userRef, { finalScore: score }, { merge: true });
+    };
   </script>
 
   <style>
@@ -40,9 +53,7 @@
 
   <div id="timer" class="text-lg font-semibold mb-6">⏳ Time left: 60:00</div>
 
-  <form id="quizForm" class="space-y-6">
-    <!-- Questions will be dynamically inserted here -->
-  </form>
+  <form id="quizForm" class="space-y-6"></form>
 
   <button id="submitBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">
     📤 Submit Answers
@@ -60,111 +71,30 @@
 
   <script>
     const questions = [
-      {
-        q: "Which keyword is used to define a function in Python?",
-        options: ["func", "define", "def", "function"],
-        answer: 2
-      },
-      {
-        q: "What does the 'input()' function return?",
-        options: ["Boolean", "String", "Integer", "Float"],
-        answer: 1
-      },
-      {
-        q: "What will 'print(3 ** 2)' output?",
-        options: ["6", "9", "8", "Error"],
-        answer: 1
-      },
-      {
-        q: "Which loop is best for iterating over a known range?",
-        options: ["while", "for", "loop", "repeat"],
-        answer: 1
-      },
-      {
-        q: "What is the result of 'not True or False'?",
-        options: ["True", "False", "None", "Error"],
-        answer: 1
-      },
-      {
-        q: "Which statement adds a new item to a list?",
-        options: ["list.add(item)", "list.append(item)", "list.insert(item)", "list.put(item)"],
-        answer: 1
-      },
-      {
-        q: "Which character starts a comment in Python?",
-        options: ["//", "--", "#", "/*"],
-        answer: 2
-      },
-      {
-        q: "What does 'elif' mean in Python?",
-        options: ["Else if", "Else loop", "Error", "End if"],
-        answer: 0
-      },
-      {
-        q: "Which function draws a line forward in turtle?",
-        options: ["move()", "draw()", "forward()", "line()"],
-        answer: 2
-      },
-      {
-        q: "Which data type is used to store key-value pairs?",
-        options: ["list", "set", "tuple", "dictionary"],
-        answer: 3
-      },
-      {
-        q: "What does 'range(3)' produce?",
-        options: ["1 2 3", "0 1 2", "0 1 2 3", "3 2 1"],
-        answer: 1
-      },
-      {
-        q: "How do you check if a key exists in a dictionary?",
-        options: ["key in dict", "dict.hasKey(key)", "key.exists(dict)", "find(dict, key)"],
-        answer: 0
-      },
-      {
-        q: "What does 'break' do in a loop?",
-        options: ["Pauses loop", "Skips next iteration", "Ends the loop", "Repeats"],
-        answer: 2
-      },
-      {
-        q: "Which of these is a valid list declaration?",
-        options: ["list = (1,2,3)", "list = [1,2,3]", "list = {1,2,3}", "list = <1,2,3>"],
-        answer: 1
-      },
-      {
-        q: "Which code correctly checks if a number is even?",
-        options: ["num % 2 == 0", "num // 2 == 0", "num * 2 == 0", "num + 2 == 0"],
-        answer: 0
-      },
-      {
-        q: "How do you access the last item in a list called 'data'?",
-        options: ["data[-1]", "data[1]", "data[last]", "data.end()"],
-        answer: 0
-      },
-      {
-        q: "Which method removes the last item from a list?",
-        options: ["remove()", "delete()", "pop()", "cut()"],
-        answer: 2
-      },
-      {
-        q: "What does 'len(\"hello\")' return?",
-        options: ["5", "4", "6", "Error"],
-        answer: 0
-      },
-      {
-        q: "What is the result of 'int(3.8)'?",
-        options: ["4", "3.8", "3", "Error"],
-        answer: 2
-      },
-      {
-        q: "What does 'turtle.circle(50)' do?",
-        options: ["Draws a square", "Draws a dot", "Draws a 50-pixel line", "Draws a circle"],
-        answer: 3
-      }
+      { q: "Which keyword is used to define a function in Python?", options: ["func", "define", "def", "function"], answer: 2 },
+      { q: "What does the 'input()' function return?", options: ["Boolean", "String", "Integer", "Float"], answer: 1 },
+      { q: "What will 'print(3 ** 2)' output?", options: ["6", "9", "8", "Error"], answer: 1 },
+      { q: "Which loop is best for iterating over a known range?", options: ["while", "for", "loop", "repeat"], answer: 1 },
+      { q: "What is the result of 'not True or False'?", options: ["True", "False", "None", "Error"], answer: 1 },
+      { q: "Which statement adds a new item to a list?", options: ["list.add(item)", "list.append(item)", "list.insert(item)", "list.put(item)"], answer: 1 },
+      { q: "Which character starts a comment in Python?", options: ["//", "--", "#", "/*"], answer: 2 },
+      { q: "What does 'elif' mean in Python?", options: ["Else if", "Else loop", "Error", "End if"], answer: 0 },
+      { q: "Which function draws a line forward in turtle?", options: ["move()", "draw()", "forward()", "line()"], answer: 2 },
+      { q: "Which data type is used to store key-value pairs?", options: ["list", "set", "tuple", "dictionary"], answer: 3 },
+      { q: "What does 'range(3)' produce?", options: ["1 2 3", "0 1 2", "0 1 2 3", "3 2 1"], answer: 1 },
+      { q: "How do you check if a key exists in a dictionary?", options: ["key in dict", "dict.hasKey(key)", "key.exists(dict)", "find(dict, key)"], answer: 0 },
+      { q: "What does 'break' do in a loop?", options: ["Pauses loop", "Skips next iteration", "Ends the loop", "Repeats"], answer: 2 },
+      { q: "Which of these is a valid list declaration?", options: ["list = (1,2,3)", "list = [1,2,3]", "list = {1,2,3}", "list = <1,2,3>"], answer: 1 },
+      { q: "Which code correctly checks if a number is even?", options: ["num % 2 == 0", "num // 2 == 0", "num * 2 == 0", "num + 2 == 0"], answer: 0 },
+      { q: "How do you access the last item in a list called 'data'?", options: ["data[-1]", "data[1]", "data[last]", "data.end()"], answer: 0 },
+      { q: "Which method removes the last item from a list?", options: ["remove()", "delete()", "pop()", "cut()"], answer: 2 },
+      { q: "What does 'len(\"hello\")' return?", options: ["5", "4", "6", "Error"], answer: 0 },
+      { q: "What is the result of 'int(3.8)'?", options: ["4", "3.8", "3", "Error"], answer: 2 },
+      { q: "What does 'turtle.circle(50)' do?", options: ["Draws a square", "Draws a dot", "Draws a 50-pixel line", "Draws a circle"], answer: 3 }
     ];
 
     function renderQuiz() {
       const form = document.getElementById('quizForm');
-      form.innerHTML = '';
       questions.forEach((q, i) => {
         const block = document.createElement('div');
         block.innerHTML = `
@@ -172,8 +102,7 @@
             <p class="font-semibold mb-2">${i + 1}. ${q.q}</p>
             ${q.options.map((opt, j) => `
               <label class="block mb-1">
-                <input type="radio" name="q${i}" value="${j}" class="mr-2">
-                ${opt}
+                <input type="radio" name="q${i}" value="${j}" class="mr-2"> ${opt}
               </label>
             `).join('')}
           </div>
@@ -182,50 +111,46 @@
       });
     }
 
-      function evaluateQuiz() {
-    const form = document.getElementById('quizForm');
-    let score = 0;
+    function evaluateQuiz() {
+      const form = document.getElementById('quizForm');
+      let score = 0;
 
-    questions.forEach((q, i) => {
-      const selected = form.querySelector(`input[name="q${i}"]:checked`);
-      if (selected && parseInt(selected.value) === q.answer) score++;
-    });
+      questions.forEach((q, i) => {
+        const selected = form.querySelector(`input[name="q${i}"]:checked`);
+        if (selected && parseInt(selected.value) === q.answer) score++;
+      });
 
-    const percentage = Math.round((score / questions.length) * 100);
-    localStorage.setItem('finalScore', percentage);
+      const percentage = Math.round((score / questions.length) * 100);
+      localStorage.setItem('finalScore', percentage);
+      saveFinalScoreToFirestore(percentage); // 🔥 Save to Firestore
 
-    // If the studentName is not already set, ask once
-    if (!localStorage.getItem('studentName')) {
-      const name = prompt("🎓 Enter your full name for the certificate:");
-      if (name) {
-        localStorage.setItem('studentName', name.trim());
+      if (!localStorage.getItem('studentName')) {
+        const name = prompt("🎓 Enter your full name for the certificate:");
+        if (name) localStorage.setItem('studentName', name.trim());
       }
+
+      if (!localStorage.getItem('certificateId')) {
+        const certId = 'PYF-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        localStorage.setItem('certificateId', certId);
+      }
+
+      document.getElementById('result').textContent = `You scored ${percentage}%. ${percentage >= 60 ? '✅ You passed!' : '❌ You did not pass.'}`;
+      document.getElementById('result').classList.remove('hidden');
+
+      if (percentage >= 60) {
+        document.getElementById('certificateLink').classList.remove('hidden');
+      }
+
+      document.getElementById('retryBtn').classList.remove('hidden');
+      document.getElementById('submitBtn').disabled = true;
     }
-
-    // Store certificate ID if not already present
-    if (!localStorage.getItem('certificateId')) {
-      const certId = 'PYF-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-      localStorage.setItem('certificateId', certId);
-    }
-
-    document.getElementById('result').textContent = `You scored ${percentage}%. ${percentage >= 60 ? '✅ You passed!' : '❌ You did not pass.'}`;
-    document.getElementById('result').classList.remove('hidden');
-
-    if (percentage >= 60) {
-      document.getElementById('certificateLink').classList.remove('hidden');
-    }
-
-    document.getElementById('retryBtn').classList.remove('hidden');
-    document.getElementById('submitBtn').disabled = true;
-  }
-
 
     function startTimer(duration) {
-      let time = duration, minutes, seconds;
+      let time = duration;
       const display = document.getElementById('timer');
       const interval = setInterval(() => {
-        minutes = Math.floor(time / 60);
-        seconds = time % 60;
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
         display.textContent = `⏳ Time left: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         if (--time < 0) {
           clearInterval(interval);
@@ -244,11 +169,11 @@
   <a href="../dashboard.html" class="block mt-4 text-blue-600 underline">← Back to Dashboard</a>
 
   <footer class="text-center text-sm text-gray-500 mt-10 border-t pt-4">
-    Pyforus is a free educational site and does not monetize content. Quiz data is stored locally in your browser.
+    Pyforus is a free educational site and does not monetize content. Quiz data is stored locally and synced securely with Firebase.
+    <br>
     <a href="https://github.com/yasarteaches/Pyforus/blob/main/LICENSE" class="text-blue-600 underline" target="_blank">
       📄 View Site License
     </a>
-
   </footer>
 </body>
 </html>
