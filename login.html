@@ -4,9 +4,30 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login to Pyforus</title>
+  <meta name="description" content="Login to Pyforus and track your Python learning progress, unlock quizzes, and earn your certificate." />
+  <meta name="keywords" content="python login, pyforus login, sign in python course, student progress" />
+  <meta name="author" content="Pyforus Team" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#2563eb" />
+  <link rel="canonical" href="https://pyforus.web.app/login.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Login to Pyforus" />
+  <meta property="og:description" content="Sign in to access your Python lessons, quizzes, and your personalized certificate." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://pyforus.web.app/login.html" />
+  <meta property="og:image" content="https://pyforus.web.app/images/pyforus-banner.png" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Login to Pyforus" />
+  <meta name="twitter:description" content="Sign in to track your Python progress and unlock achievements with Pyforus." />
+  <meta name="twitter:image" content="https://pyforus.web.app/images/pyforus-banner.png" />
+
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <script src="https://cdn.tailwindcss.com"></script>
+
   <script type="module">
-    // Firebase imports
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
 
@@ -23,11 +44,9 @@
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    // Sign in function
     window.loginWithGoogle = () => {
       signInWithPopup(auth, provider)
         .then((result) => {
-          // Save name to localStorage
           const user = result.user;
           localStorage.setItem('studentName', user.displayName);
           window.location.href = "dashboard.html";
@@ -38,14 +57,11 @@
         });
     };
 
-    // If already logged in, redirect
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // Already logged in, skip login page
         window.location.href = 'dashboard.html';
       }
     });
-
   </script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">

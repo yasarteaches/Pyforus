@@ -3,10 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyforus Dashboard</title>
+  <title>Pyforus Dashboard – Track Your Python Progress</title>
+  <meta name="description" content="View your Python learning progress on Pyforus. Complete lessons, quizzes, and earn your certificate." />
+  <meta name="keywords" content="pyforus dashboard, python progress, python learning, track course" />
+  <meta name="author" content="Pyforus Team" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#2563eb" />
+  <link rel="canonical" href="https://pyforus.web.app/dashboard.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Pyforus Dashboard – Track Your Python Progress" />
+  <meta property="og:description" content="Your central dashboard to view lessons, quiz results, and unlock your Python certificate." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://pyforus.web.app/dashboard.html" />
+  <meta property="og:image" content="https://pyforus.web.app/images/pyforus-banner.png" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Pyforus Dashboard – Track Your Python Progress" />
+  <meta name="twitter:description" content="Your central dashboard to view lessons, quiz results, and unlock your Python certificate." />
+  <meta name="twitter:image" content="https://pyforus.web.app/images/pyforus-banner.png" />
+
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Firebase, Auth, Firestore Setup -->
+  <!-- Firebase Setup -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
@@ -155,13 +176,7 @@
                 : 'bg-blue-600 hover:bg-blue-700'
               : 'bg-gray-400 cursor-not-allowed'
           }">
-            ${
-              isUnlocked
-                ? isDone
-                  ? '✅ Completed'
-                  : 'Start'
-                : '🔒 Locked'
-            }
+            ${isUnlocked ? (isDone ? '✅ Completed' : 'Start') : '🔒 Locked'}
           </a>
         </div>
       `;

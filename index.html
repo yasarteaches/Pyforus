@@ -3,34 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyforus – Learn Python</title>
+  <title>Pyforus – Learn Python for Free</title>
+  <meta name="description" content="Pyforus is a beginner-friendly platform to learn Python programming through interactive lessons, quizzes, and projects." />
+  <meta name="keywords" content="learn python, python course, beginner python, free python lessons, programming, pyforus" />
+  <meta name="author" content="Pyforus Team" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#2563eb" />
+  <link rel="canonical" href="https://pyforus.web.app" />
+
+  <!-- Open Graph (Facebook/LinkedIn) -->
+  <meta property="og:title" content="Pyforus – Learn Python for Free" />
+  <meta property="og:description" content="Interactive and beginner-friendly Python course with quizzes, certificates, and lessons." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://pyforus.web.app" />
+  <meta property="og:image" content="https://pyforus.web.app/images/pyforus-banner.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Pyforus – Learn Python for Free" />
+  <meta name="twitter:description" content="Master Python with fun lessons, interactive quizzes, and your own certificate." />
+  <meta name="twitter:image" content="https://pyforus.web.app/images/pyforus-banner.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-900 font-sans flex items-center justify-center min-h-screen">
   <div class="text-center px-4">
-    <h1 class="text-4xl md:text-5xl font-bold mb-4">🐍 Welcome to pyforus</h1>
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">🐍 Welcome to Pyforus</h1>
     <p class="text-lg mb-6">Python for beginners — by a student, for students.</p>
     <a href="dashboard.html" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
-  📘 Go to Dashboard
-</a>
+      📘 Go to Dashboard
+    </a>
   </div>
-  <script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
 
-    // Your web app's Firebase configuration
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
       authDomain: "pyforus-4289e.firebaseapp.com",
       projectId: "pyforus-4289e",
-      storageBucket: "pyforus-4289e.firebasestorage.app",
+      storageBucket: "pyforus-4289e.appspot.com",
       messagingSenderId: "798083294290",
       appId: "1:798083294290:web:c19d4c169c451410062b8b"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
   </script>
 </body>
