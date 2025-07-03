@@ -6,6 +6,17 @@
   <title>Verify Pyforus Certificate</title>
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- SEO -->
+  <meta name="description" content="Verify the authenticity of a Pyforus Python Certificate." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://pyforus-4289e.web.app/verify.html" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Verify Pyforus Certificate" />
+  <meta property="og:description" content="Enter your Pyforus certificate ID to verify its validity." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://pyforus-4289e.web.app/verify.html" />
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
@@ -22,33 +33,54 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // Escape HTML to prevent injection
+    function escapeHTML(str) {
+      return str.replace(/[&<>"']/g, (tag) => (
+        {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;'
+        }[tag]
+      ));
+    }
+
     window.verifyCertificate = async () => {
       const certId = document.getElementById("certInput").value.trim();
       const resultDiv = document.getElementById("result");
 
       if (!certId) {
-        resultDiv.innerHTML = "<p class='text-red-600'>Please enter a certificate ID.</p>";
+        resultDiv.innerHTML = `<p class="text-red-600">Please enter a certificate ID.</p>`;
         return;
       }
 
-      const certRef = doc(db, "certificates", certId);
-      const certSnap = await getDoc(certRef);
+      resultDiv.innerHTML = `<p class="text-gray-600 animate-pulse">🔄 Checking...</p>`;
 
-      if (!certSnap.exists()) {
-        resultDiv.innerHTML = "<p class='text-red-600'>❌ Certificate not found.</p>";
-        return;
+      try {
+        const certRef = doc(db, "certificates", certId);
+        const certSnap = await getDoc(certRef);
+
+        if (!certSnap.exists()) {
+          resultDiv.innerHTML = `<p class="text-red-600">❌ Certificate not found.</p>`;
+          return;
+        }
+
+        const data = certSnap.data();
+
+        resultDiv.innerHTML = `
+          <div class="bg-green-100 p-4 rounded shadow text-green-800">
+            ✅ <strong>Certificate Valid</strong><br />
+            <strong>Name:</strong> ${escapeHTML(data.name)}<br />
+            <strong>Score:</strong> ${data.score}%<br />
+            <strong>Date:</strong> ${escapeHTML(data.date)}<br />
+            <strong>ID:</strong> ${escapeHTML(certId)}
+          </div>
+        `;
+      } catch (error) {
+        console.error(error);
+        resultDiv.innerHTML = `<p class="text-red-600">⚠️ Something went wrong. Try again later.</p>`;
       }
-
-      const data = certSnap.data();
-
-      resultDiv.innerHTML = `
-        <div class="bg-green-100 p-4 rounded shadow text-green-800">
-          ✅ <strong>Certificate Valid</strong><br />
-          <strong>Name:</strong> ${data.name} <br />
-          <strong>Score:</strong> ${data.score}%<br />
-          <strong>Date:</strong> ${data.date}
-        </div>
-      `;
     };
   </script>
 </head>
@@ -60,7 +92,7 @@
     <button onclick="verifyCertificate()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
       🔍 Verify
     </button>
-    <div id="result" class="mt-4 text-left"></div>
+    <div id="result" class="mt-4 text-left text-sm"></div>
     <a href="index.html" class="block mt-6 text-blue-600 underline">← Back to Home</a>
   </div>
 </body>
