@@ -10,7 +10,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
@@ -31,30 +31,50 @@
         return;
       }
 
-      // Try loading name and certificate ID from Firestore if needed (optional)
       const userRef = doc(db, "users", user.uid);
       const snap = await getDoc(userRef);
+
       if (snap.exists()) {
         const data = snap.data();
+
         if (data.finalScore >= 60) {
-          // Optionally set localStorage from Firestore
           if (!localStorage.getItem("studentName") && user.displayName) {
-            localStorage.setItem("studentName", user.displayName);
+          localStorage.setItem("studentName", user.displayName);
           }
+
           if (!localStorage.getItem("certificateId")) {
             const generatedId = 'PYF-' + Math.random().toString(36).substr(2, 9).toUpperCase();
             localStorage.setItem("certificateId", generatedId);
           }
+
+          // ✅ Save to Firestore
+          const score = data.finalScore || 0;
+          const name = user.displayName || "Unknown";
+          const certId = localStorage.getItem("certificateId");
+          const today = new Date().toLocaleDateString("en-US");
+
+          if (certId) {
+            const certRef = doc(db, "certificates", certId);
+            await setDoc(certRef, {
+              name,
+              score,
+              date: today,
+              uid: user.uid
+            });
+          }
+
         } else {
           alert("❌ You have not passed the final quiz yet.");
           window.location.href = "../dashboard.html";
         }
+
       } else {
         alert("⚠️ No user data found.");
         window.location.href = "../dashboard.html";
       }
     });
   </script>
+
 
   <style>
     .certificate-wrapper {
