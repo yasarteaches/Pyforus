@@ -4,23 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pyforus – Learn Python for Free</title>
+
+  <!-- SEO -->
   <meta name="description" content="Pyforus is a beginner-friendly platform to learn Python programming through interactive lessons, quizzes, and projects." />
   <meta name="keywords" content="learn python, python course, beginner python, free python lessons, programming, pyforus" />
   <meta name="author" content="Pyforus Team" />
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#2563eb" />
-
-  <!-- ✅ Google Search Console Verification -->
   <meta name="google-site-verification" content="Za_wJQrIAyQrWc_kPY0I12B3tB8TBpOoVRSg3pxeoOw" />
 
-  <!-- Open Graph (Facebook) -->
+  <!-- Open Graph -->
   <meta property="og:title" content="Pyforus – Learn Python for Free" />
   <meta property="og:description" content="Interactive and beginner-friendly Python course with quizzes, certificates, and lessons." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://pyforus-4289e.web.app" />
   <meta property="og:image" content="https://pyforus-4289e.web.app/images/pyforus-banner.png" />
 
-  <!-- Twitter Card -->
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Pyforus – Learn Python for Free" />
   <meta name="twitter:description" content="Master Python with fun lessons, interactive quizzes, and your own certificate." />
@@ -28,16 +28,19 @@
 
   <link rel="icon" href="/favicon.ico" />
   <link rel="canonical" href="https://pyforus-4289e.web.app" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 text-gray-900 font-sans flex items-center justify-center min-h-screen">
+
+<body class="bg-gray-100 text-gray-900 font-sans min-h-screen flex items-center justify-center">
   <div class="text-center px-4">
-    <h1 class="text-4xl md:text-5xl font-bold mb-4">🐍 Welcome to pyforus</h1>
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">🐍 Welcome to Pyforus</h1>
     <p class="text-lg mb-6">Python for beginners — by a student, for students.</p>
     <a href="dashboard.html" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
       📘 Go to Dashboard
     </a>
   </div>
 
+  <!-- Firebase App Init -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
 
@@ -50,7 +53,7 @@
       appId: "1:798083294290:web:c19d4c169c451410062b8b"
     };
 
-    const app = initializeApp(firebaseConfig);
+    initializeApp(firebaseConfig);
   </script>
 </body>
 </html>
