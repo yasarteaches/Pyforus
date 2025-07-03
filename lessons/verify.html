@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verify Pyforus Certificate</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="Verify a Pyforus certificate by entering the certificate ID. Ensure it's valid and view the recipient's name and score." />
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans p-6 max-w-xl mx-auto min-h-screen">
+
+  <h1 class="text-3xl font-bold mb-6 text-center">🎓 Verify Pyforus Certificate</h1>
+
+  <div class="bg-white p-6 rounded shadow">
+    <label for="certId" class="block mb-2 font-semibold">Enter Certificate ID:</label>
+    <input id="certId" type="text" placeholder="e.g., PYF-8a7c2e3f"
+      class="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring focus:border-blue-400" />
+
+    <button onclick="verifyCertificate()" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+      🔍 Verify
+    </button>
+
+    <div id="result" class="mt-6 text-center text-lg"></div>
+  </div>
+
+  <a href="index.html" class="block text-center mt-6 text-blue-600 underline">← Back to Pyforus Home</a>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBjYAj4uJglYqy5m37ikkXzJeJO_mP7eAo",
+      authDomain: "pyforus-4289e.firebaseapp.com",
+      projectId: "pyforus-4289e",
+      storageBucket: "pyforus-4289e.appspot.com",
+      messagingSenderId: "798083294290",
+      appId: "1:798083294290:web:c19d4c169c451410062b8b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.verifyCertificate = async () => {
+      const certId = document.getElementById("certId").value.trim();
+      const resultBox = document.getElementById("result");
+
+      if (!certId) {
+        resultBox.textContent = "❗ Please enter a certificate ID.";
+        resultBox.className = "mt-6 text-center text-red-600 text-lg";
+        return;
+      }
+
+      const certRef = doc(db, "certificates", certId);
+      const docSnap = await getDoc(certRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        resultBox.innerHTML = `
+          ✅ Certificate is valid!<br><br>
+          <strong>Name:</strong> ${data.name}<br>
+          <strong>Final Score:</strong> ${data.score}%<br>
+          <strong>Issued:</strong> ${new Date(data.date).toLocaleDateString()}
+        `;
+        resultBox.className = "mt-6 text-center text-green-700 text-lg";
+      } else {
+        resultBox.textContent = "❌ No certificate found with that ID.";
+        resultBox.className = "mt-6 text-center text-red-600 text-lg";
+      }
+    };
+  </script>
+
+</body>
+</html>

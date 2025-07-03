@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://pyforus-4289e.web.app/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://pyforus-4289e.web.app/login.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://pyforus-4289e.web.app/dashboard.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Dersler -->
+  <url><loc>https://pyforus-4289e.web.app/lessons/lesson1.html</loc></url>
+  <url><loc>https://pyforus-4289e.web.app/lessons/lesson2.html</loc></url>
+  <url><loc>https://pyforus-4289e.web.app/lessons/lesson3.html</loc></url>
+  <url><loc>https://pyforus-4289e.web.app/lessons/lesson4.html</loc></url>
+  <url><loc>https://pyforus-4289e.web.app/lessons/lesson5.html</loc></url>
+  <url><loc>https://pyforus-4289e.web.app/lessons/lesson6.html</loc></url>
+  <url><loc>https://pyforus-4289e.web.app/lessons/lesson7.html</loc></url>
+  <url><loc>https://pyforus-4289e.web.app/lessons/lesson1-4-quiz.html</loc></url>
+  <url><loc>https://pyforus-4289e.web.app/lessons/final-quiz.html</loc></url>
+  <url><loc>https://pyforus-4289e.web.app/lessons/certificate.html</loc></url>
+  <url><loc>https://pyforus-4289e.web.app/lessons/verify.html</loc></url>
+
+</urlset>

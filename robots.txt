@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pyforus-4289e.web.app/sitemap.xml
